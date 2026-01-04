@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - frames</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="login/login.css" />
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="brand-header">
+                <img src="image/frames_white_logo_svg.svg" alt="frames logo" width="65px" />
+                <h1>frames</h1>
+            </div>
+
+            <!-- Login Form -->
+            <div class="form-container" id="loginForm">
+                <h2>Welcome Back</h2>
+                <p class="form-subtitle">Sign in to your account</p>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required placeholder="Enter your email" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required placeholder="Enter your password" />
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Login</button>
+                    
+                    <p class="toggle-text">
+                        Don't have an account? 
+                        <span onclick="toggleForms()" class="toggle-link">Sign Up</span>
+                    </p>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="form-container hidden" id="signupForm">
+                <h2>Create Account</h2>
+                <p class="form-subtitle">Join frames today</p>
+                
+                <form onsubmit="handleSignup(event)">
+                    <div class="input-group">
+                        <label for="signupUsername">Username</label>
+                        <input type="text" id="signupUsername" required placeholder="Choose a username" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" required placeholder="Enter your email" />
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" required placeholder="Create password" minlength="8"/>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" required placeholder="Confirm password" />
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="signupPhone">Phone Number</label>
+                        <input type="tel" id="signupPhone" required placeholder="Enter phone number" minlength="10" maxlength="10"/>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="signupAddress">Address</label>
+                        <textarea id="signupAddress" required placeholder="Enter your address" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="signupPincode">Pincode</label>
+                            <input type="number" id="signupPincode" required placeholder="Pincode" minlength="6"/>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="signupCountry">Country</label>
+                            <input type="text" id="signupCountry" required placeholder="Country" />
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Sign Up</button>
+                    
+                    <p class="toggle-text">
+                        Already have an account? 
+                        <span onclick="toggleForms()" class="toggle-link">Login</span>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="login/auth.js"></script>
+</body>
+</html>

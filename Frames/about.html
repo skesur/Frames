@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - frames</title>
+    <script src="bootstrap/bootstrap.bundle.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="home/home.css" />
+    <link rel="stylesheet" href="pages.css" />
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="navbar-brand nav-logo">
+        <img src="image/frames_white_logo_svg.svg" alt="frames logo" width="65px" />
+        <h1>frames</h1>
+      </div>
+      
+      <div class="nav-body d-none d-lg-flex">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="shop.html">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="terms.html">Terms</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn user-btn" id="user">
+              <i class="bi bi-person-circle"></i>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="btn cart-btn" id="cart">
+              <i class="bi bi-cart3"></i>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="btn login-btn" id="login">LogIn</button>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="dropdown nav-dropdown d-lg-none">
+        <button class="dropdown-toggle-btn" data-bs-toggle="dropdown">
+          <i class="bi bi-list"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a href="index.html" class="dropdown-item">Home</a></li>
+          <li><a href="shop.html" class="dropdown-item">Shop</a></li>
+          <li><a href="about.html" class="dropdown-item">About</a></li>
+          <li><a href="contact.html" class="dropdown-item">Contact</a></li>
+          <li><a href="terms.html" class="dropdown-item">Terms</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <button
+              class="btn user-btn-mobile"
+              id="userMobile"
+              style="border-radius: 16px; background-color: #171515; color: #F1D5D5; margin-top: 8px; border: #F1D5D5 2px solid; width: 35%; margin-left: 64px;"
+            >
+              <i class="bi bi-person-circle"></i>
+            </button>
+          </li>
+          <br/>
+          <li>
+            <button
+              class="btn cart-btn w-50 mx-5"
+              id="cartMobile"
+              style="border-radius: 16px"
+            >
+              <i class="bi bi-cart3"></i>
+            </button>
+          </li>
+          <br />
+          <li>
+            <button
+              class="btn login-btn w-75 mx-4"
+              id="loginMobile"
+              style="border-radius: 16px"
+            >
+              LogIn
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- About Content -->
+    <div class="page-container">
+      <!-- Hero Section -->
+      <div class="page-hero">
+        <h1>About frames</h1>
+        <p>Crafting Vision, Defining Style Since 2020</p>
+      </div>
+
+      <!-- Story Section -->
+      <div class="content-section" id="Our-story">
+        <div class="section-header">
+          <i class="bi bi-book"></i>
+          <h2>Our Story</h2>
+        </div>
+        <div class="text-content">
+          <p>
+            frames was born from a simple belief: eyewear should be more than just a necessity—it should be an expression of who you are. Founded in 2020, we set out to revolutionize the way people think about glasses, transforming them from medical devices into fashion statements.
+          </p>
+          <p>
+            What started as a small studio with a handful of designs has grown into a brand trusted by thousands worldwide. Every pair of frames tells a story of craftsmanship, innovation, and attention to detail that sets us apart.
+          </p>
+        </div>
+      </div>
+
+      <!-- Mission & Vision -->
+      <div class="dual-section">
+        <div class="dual-card">
+          <div class="card-icon">
+            <i class="bi bi-eye"></i>
+          </div>
+          <h3>Our Vision</h3>
+          <p>
+            To become the world's most innovative eyewear brand, where style meets functionality and every customer finds their perfect frame.
+          </p>
+        </div>
+        
+        <div class="dual-card">
+          <div class="card-icon">
+            <i class="bi bi-bullseye"></i>
+          </div>
+          <h3>Our Mission</h3>
+          <p>
+            Creating premium, affordable eyewear that empowers individuals to express their unique personality while maintaining exceptional quality and comfort.
+          </p>
+        </div>
+      </div>
+
+      <!-- Values Section -->
+      <div class="content-section" id="Our-values">
+        <div class="section-header">
+          <i class="bi bi-gem"></i>
+          <h2>Our Values</h2>
+        </div>
+        
+        <div class="values-grid">
+          <div class="value-item">
+            <i class="bi bi-star-fill"></i>
+            <h4>Quality First</h4>
+            <p>Every frame is crafted with premium materials and undergoes rigorous quality checks.</p>
+          </div>
+          
+          <div class="value-item">
+            <i class="bi bi-palette-fill"></i>
+            <h4>Design Excellence</h4>
+            <p>Our designers blend timeless elegance with contemporary trends to create unique styles.</p>
+          </div>
+          
+          <div class="value-item">
+            <i class="bi bi-shield-check"></i>
+            <h4>Customer Trust</h4>
+            <p>Your satisfaction is our priority, backed by hassle-free returns and lifetime support.</p>
+          </div>
+          
+          <div class="value-item">
+            <i class="bi bi-recycle"></i>
+            <h4>Sustainability</h4>
+            <p>We're committed to eco-friendly practices and sustainable materials in all our products.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Section -->
+      <div class="content-section" id="Our-teams">
+        <div class="section-header">
+          <i class="bi bi-people-fill"></i>
+          <h2>Our Team</h2>
+        </div>
+        <div class="text-content">
+          <p>
+            Behind every frame is a passionate team of designers, craftsmen, and innovators dedicated to bringing you the best eyewear experience. From our skilled artisans who handcraft each piece to our customer support team ready to help you find your perfect fit, we're here for you every step of the way.
+          </p>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="cta-section">
+        <h2>Ready to Find Your Perfect Frame?</h2>
+        <p>Explore our collection and discover eyewear that's uniquely you</p>
+        <button class="cta-button" onclick="window.location.href='shop.html'">
+          Shop Now <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <script src="navigation.js"></script>
+  </body>
+</html>

@@ -1,0 +1,788 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&family=DM+Serif+Display&family=Life+Savers:wght@700;800&display=swap');
+
+:root {
+    --primary-background: #171515;
+    --primary-text: #F1D5D5;
+    --secondary-text: #CDB6B6;
+    --component-color-1: #EE801C;
+    --component-color-2: #943cf3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--primary-background);
+    color: var(--primary-text);
+    font-family: "Arimo", sans-serif;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   HERO WRAPPER
+   ============================================ */
+
+.hero-wrapper {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0 5%;
+}
+
+/* ============================================
+   VIDEO BACKGROUND
+   ============================================ */
+
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+#hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) contrast(1);
+}
+
+.video-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        rgba(238, 128, 28, 0.15) 0%,
+        rgba(23, 21, 21, 0.85) 40%,
+        rgba(148, 60, 243, 0.15) 100%
+    );
+    mix-blend-mode: multiply;
+}
+
+/* ============================================
+   HERO CONTENT
+   ============================================ */
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 8rem 0 4rem;
+}
+
+/* ============================================
+   HERO MAIN
+   ============================================ */
+
+.hero-main {
+    max-width: 800px;
+}
+
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    background: rgba(238, 128, 28, 0.1);
+    border: 1px solid rgba(238, 128, 28, 0.3);
+    border-radius: 50px;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.tag-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--component-color-1);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.tag-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--component-color-1);
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   HERO TITLE
+   ============================================ */
+
+.hero-title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(2rem, 6vw, 6rem);
+    line-height: 1.3;
+    margin-bottom: 1.2rem;
+    font-weight: 400;
+}
+
+.title-line {
+    display: block;
+    overflow: hidden;
+}
+
+.word {
+    display: inline-block;
+    margin-right: 0.2em;
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--component-color-1), var(--component-color-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.word-frames{
+    font-family: "Life Savers", serif;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--component-color-1), var(--component-color-2));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: clamp(2rem, 6vw, 6rem);
+    margin: 0
+}
+
+/* ============================================
+   HERO DESCRIPTION
+   ============================================ */
+
+.hero-description {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: var(--secondary-text);
+    max-width: 600px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* ============================================
+   HERO CTA BUTTONS
+   ============================================ */
+
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.primary-btn {
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--component-color-1), var(--component-color-2));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.primary-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.primary-btn:hover::before {
+    left: 100%;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(238, 128, 28, 0.4);
+}
+
+.btn-icon {
+    transition: transform 0.3s;
+}
+
+.primary-btn:hover .btn-icon {
+    transform: translateX(5px);
+}
+
+.secondary-btn {
+    padding: 1rem 2.5rem;
+    background: transparent;
+    color: var(--primary-text);
+    border: 2px solid rgba(241, 213, 213, 0.3);
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.secondary-btn:hover {
+    background: rgba(241, 213, 213, 0.1);
+    border-color: var(--component-color-1);
+    color: var(--component-color-1);
+}
+
+/* ============================================
+   HERO STATS
+   ============================================ */
+
+.hero-stats {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.stat-item {
+    text-align: left;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-text);
+    margin-bottom: 0.25rem;
+    background: linear-gradient(135deg, var(--component-color-1), var(--component-color-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--secondary-text);
+}
+
+.stat-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(241, 213, 213, 0.2);
+}
+
+/* ============================================
+   FLOATING PRODUCT CARDS
+   ============================================ */
+
+.floating-cards {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.product-card {
+    position: absolute;
+    width: 280px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 1.5rem;
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-10px) scale(1) !important;
+}
+
+.card-1 {
+    top: 15%;
+    right: 10%;
+}
+
+.card-2 {
+    top: 45%;
+    right: 25%;
+}
+
+.card-3 {
+    bottom: 20%;
+    right: 5%;
+}
+
+.product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+}
+
+.card-info h4 {
+    font-size: 1.1rem;
+    color: var(--primary-text);
+    margin-bottom: 0.25rem;
+}
+
+.card-info p {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--component-color-1);
+}
+
+/* ============================================
+   SCROLL INDICATOR
+   ============================================ */
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+}
+
+.scroll-line {
+    width: 2px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--component-color-1), transparent);
+    animation: scrollMove 2s infinite;
+}
+
+@keyframes scrollMove {
+    0%, 100% { transform: translateY(0); opacity: 0; }
+    50% { transform: translateY(10px); opacity: 1; }
+}
+
+.scroll-text {
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ============================================
+   DECORATIVE ELEMENTS
+   ============================================ */
+
+.hero-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+}
+
+.circle-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--component-color-1), transparent);
+    top: -10%;
+    left: -10%;
+    animation: float 20s infinite;
+}
+
+.circle-2 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--component-color-2), transparent);
+    bottom: -5%;
+    right: -5%;
+    animation: float 15s infinite reverse;
+}
+
+.circle-3 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--component-color-1), transparent);
+    top: 50%;
+    left: 50%;
+    animation: float 25s infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -30px); }
+    66% { transform: translate(-30px, 30px); }
+}
+
+/* ============================================
+   MODERN FEATURES SECTION
+   ============================================ */
+
+.features-section {
+    padding: 8rem 5%;
+    background: linear-gradient(180deg, var(--primary-background) 0%, rgba(23, 21, 21, 0.95) 100%);
+    position: relative;
+}
+
+.section-header-modern {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.section-tag {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(238, 128, 28, 0.1);
+    border: 1px solid rgba(238, 128, 28, 0.3);
+    border-radius: 50px;
+    color: var(--component-color-1);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.section-title-modern {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--primary-text);
+    margin-bottom: 1rem;
+}
+
+.section-description {
+    font-size: 1.25rem;
+    color: var(--secondary-text);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.features-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card-modern {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.feature-card-modern:hover {
+    transform: translateY(-10px);
+    border-color: rgba(238, 128, 28, 0.5);
+    box-shadow: 0 20px 60px rgba(238, 128, 28, 0.2);
+}
+
+.feature-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, var(--component-color-1), var(--component-color-2));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    transition: transform 0.3s;
+}
+
+.feature-card-modern:hover .feature-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.feature-card-modern h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 1.5rem;
+    color: var(--primary-text);
+    margin-bottom: 1rem;
+}
+
+.feature-card-modern p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--secondary-text);
+}
+
+/* ============================================
+   FINAL CTA MODERN
+   ============================================ */
+
+.final-cta-modern {
+    padding: 10rem 5%;
+    background: linear-gradient(135deg, rgba(238, 128, 28, 0.05), rgba(148, 60, 243, 0.05));
+    position: relative;
+}
+
+.cta-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    color: var(--primary-text);
+    margin-bottom: 1.5rem;
+}
+
+.cta-description {
+    font-size: 1.5rem;
+    color: var(--secondary-text);
+    margin-bottom: 3rem;
+}
+
+.cta-button-large {
+    padding: 1.5rem 4rem;
+    background: linear-gradient(135deg, var(--component-color-1), var(--component-color-2));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button-large::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.cta-button-large:hover::before {
+    left: 100%;
+}
+
+.cta-button-large:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(238, 128, 28, 0.4);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+footer {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5rem 5% 2rem;
+    border-top: 1px solid rgba(238, 128, 28, 0.2);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 4rem;
+    max-width: 1400px;
+    margin: 0 auto 3rem;
+}
+
+.footer-section h3 {
+    font-family: "DM Serif Display", serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--component-color-1);
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-section a {
+    color: var(--secondary-text);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-section a:hover {
+    color: var(--component-color-1);
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.footer-logo h2 {
+    font-family: "Life Savers", serif;
+    font-size: 2rem;
+    color: var(--primary-text);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.social-links a {
+    width: 45px;
+    height: 45px;
+    background: rgba(238, 128, 28, 0.1);
+    border: 1px solid rgba(238, 128, 28, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--component-color-1);
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
+
+.social-links a:hover {
+    background: var(--component-color-1);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(205, 182, 182, 0.2);
+    color: var(--secondary-text);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .floating-cards {
+        display: none;
+    }
+    
+    .hero-main {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-wrapper {
+        padding: 0 5%;
+    }
+    
+    .hero-content {
+        padding: 6rem 0 3rem;
+    }
+    
+    .hero-cta {
+        flex-direction: column;
+    }
+    
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-stats {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+    
+    .stat-divider {
+        display: none;
+    }
+    
+    .features-section {
+        padding: 5rem 5%;
+    }
+    
+    .section-header-modern {
+        margin-bottom: 3rem;
+    }
+    
+    .features-grid-modern {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .final-cta-modern {
+        padding: 6rem 5%;
+    }
+    
+    footer {
+        padding: 3rem 5% 2rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}

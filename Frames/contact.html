@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - frames</title>
+    <script src="bootstrap/bootstrap.bundle.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="home/home.css" />
+    <link rel="stylesheet" href="pages.css" />
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="navbar-brand nav-logo">
+        <img src="image/frames_white_logo_svg.svg" alt="frames logo" width="65px" />
+        <h1>frames</h1>
+      </div>
+      
+      <div class="nav-body d-none d-lg-flex">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="shop.html">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="terms.html">Terms</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn user-btn" id="user">
+              <i class="bi bi-person-circle"></i>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="btn cart-btn" id="cart">
+              <i class="bi bi-cart3"></i>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="btn login-btn" id="login">LogIn</button>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="dropdown nav-dropdown d-lg-none">
+        <button class="dropdown-toggle-btn" data-bs-toggle="dropdown">
+          <i class="bi bi-list"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a href="index.html" class="dropdown-item">Home</a></li>
+          <li><a href="shop.html" class="dropdown-item">Shop</a></li>
+          <li><a href="about.html" class="dropdown-item">About</a></li>
+          <li><a href="contact.html" class="dropdown-item">Contact</a></li>
+          <li><a href="terms.html" class="dropdown-item">Terms</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <button
+              class="btn user-btn-mobile"
+              id="userMobile"
+              style="border-radius: 16px; background-color: #171515; color: #F1D5D5; margin-top: 8px; border: #F1D5D5 2px solid; width: 35%; margin-left: 64px;"
+            >
+              <i class="bi bi-person-circle"></i>
+            </button>
+          </li>
+          <br/>
+          <li>
+            <button
+              class="btn cart-btn w-50 mx-5"
+              id="cartMobile"
+              style="border-radius: 16px"
+            >
+              <i class="bi bi-cart3"></i>
+            </button>
+          </li>
+          <br />
+          <li>
+            <button
+              class="btn login-btn w-75 mx-4"
+              id="loginMobile"
+              style="border-radius: 16px"
+            >
+              LogIn
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Contact Content -->
+    <div class="page-container">
+      <!-- Hero Section -->
+      <div class="page-hero">
+        <h1>Get in Touch</h1>
+        <p>We'd Love to Hear From You</p>
+      </div>
+
+      <!-- Contact Info Cards -->
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <i class="bi bi-geo-alt-fill"></i>
+          </div>
+          <h3>Visit Us</h3>
+          <p>Chankyapuri<br/>Ghatlodia<br/>Ahmedabad, 380061</p>
+        </div>
+        
+        <div class="contact-card">
+          <div class="contact-icon">
+            <i class="bi bi-telephone-fill"></i>
+          </div>
+          <h3>Call Us</h3>
+          <p>9898989898<br/>Mon - Fri: 9AM - 6PM<br/>Sat: 10AM - 4PM</p>
+        </div>
+        
+        <div class="contact-card">
+          <div class="contact-icon">
+            <i class="bi bi-envelope-fill"></i>
+          </div>
+          <h3>Email Us</h3>
+          <p>support@frames.com<br/>info@frames.com<br/>Response within 24hrs</p>
+        </div>
+      </div>
+
+      <!-- Contact Form Section -->
+      <div class="content-section">
+        <div class="section-header">
+          <i class="bi bi-chat-dots-fill"></i>
+          <h2>Send Us a Message</h2>
+        </div>
+        
+        <div class="contact-form-wrapper">
+          <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contactName">Full Name *</label>
+                <input type="text" id="contactName" required placeholder="Enter your name..." />
+              </div>
+              
+              <div class="form-group">
+                <label for="contactEmail">Email Address *</label>
+                <input type="email" id="contactEmail" required placeholder="email@example.com" />
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contactPhone">Phone Number</label>
+                <input type="tel" id="contactPhone" placeholder="123467890" />
+              </div>
+              
+              <div class="form-group">
+                <label for="contactSubject">Subject *</label>
+                <select id="contactSubject" required>
+                  <option value="">Select a subject</option>
+                  <option value="general">General Inquiry</option>
+                  <option value="order">Order Support</option>
+                  <option value="product">Product Question</option>
+                  <option value="feedback">Feedback</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="contactMessage">Message *</label>
+              <textarea id="contactMessage" required placeholder="Tell us how we can help you..." rows="6"></textarea>
+            </div>
+            
+            <button type="submit" class="submit-button">
+              Send Message <i class="bi bi-send-fill"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- FAQ Accordion Section -->
+      <div class="content-section">
+        <div class="section-header">
+          <i class="bi bi-question-circle-fill"></i>
+          <h2>Frequently Asked Questions</h2>
+        </div>
+        
+        <div class="accordion" id="faqAccordion">
+          <!-- FAQ Item 1 -->
+          <div class="accordion-item faq-accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button faq-accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <i class="bi bi-patch-question-fill me-2"></i>
+                What are your shipping times?
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+              <div class="accordion-body faq-accordion-body">
+                We typically ship within 1-2 business days. Standard shipping takes 5-7 business days, while express shipping takes 2-3 business days. For international orders, delivery times vary by location (typically 10-21 business days).
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="accordion-item faq-accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button faq-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <i class="bi bi-eyeglasses me-2"></i>
+                Do you offer prescription lenses?
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+              <div class="accordion-body faq-accordion-body">
+                Yes! We offer prescription lenses for all our frames. Simply upload your prescription during checkout or contact us for assistance. Our team will ensure your lenses are crafted to your exact specifications with high-quality materials.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="accordion-item faq-accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button faq-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <i class="bi bi-arrow-return-left me-2"></i>
+                What is your return policy?
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+              <div class="accordion-body faq-accordion-body">
+                We offer a 30-day return policy on all unused frames in original condition. Returns are free and easy with our prepaid shipping labels. Simply log into your account, request a return, and we'll email you a prepaid label. Refunds are processed within 5-7 business days of receiving your return.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="accordion-item faq-accordion-item">
+            <h2 class="accordion-header" id="headingFive">
+              <button class="accordion-button faq-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <i class="bi bi-credit-card-fill me-2"></i>
+                What payment methods do you accept?
+              </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+              <div class="accordion-body faq-accordion-body">
+                We accept all major credit cards, upi, PayPal and Apple Pay. All payments are processed securely through encrypted connections to protect your information.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="accordion-item faq-accordion-item">
+            <h2 class="accordion-header" id="headingSix">
+              <button class="accordion-button faq-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                <i class="bi bi-shield-check me-2"></i>
+                Do you offer a warranty?
+              </button>
+            </h2>
+            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+              <div class="accordion-body faq-accordion-body">
+                Yes! All frames come with a 1-year limited warranty covering manufacturing defects. This includes frame breakage, lens coating defects, and hardware failures. Extended warranty options are also available for purchase. Visit our Terms page for complete warranty details.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Section -->
+      <div class="social-section">
+        <h2>Follow Us</h2>
+        <p>Stay connected for the latest styles and exclusive offers</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-youtube"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <script src="home/navigation.js"></script>
+    <script src="contact/contact.js"></script>
+  </body>
+</html>

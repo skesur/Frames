@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop - frames</title>
+    <script src="bootstrap/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="home/home.css" />
+    <link rel="stylesheet" href="shop/shop.css" />
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="navbar-brand nav-logo">
+            <img src="image/frames_white_logo_svg.svg" alt="frames logo" width="65px" />
+            <h1>frames</h1>
+        </div>
+
+        <div class="nav-body d-none d-lg-flex">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="shop.html">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="terms.html">Terms</a>
+                </li>
+                <li class="nav-item">
+                    <button class="btn user-btn" id="user">
+                        <i class="bi bi-person-circle"></i>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn cart-btn" id="cart">
+                        <i class="bi bi-cart3"></i>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn login-btn" id="login">LogIn</button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dropdown nav-dropdown d-lg-none">
+            <button class="dropdown-toggle-btn" data-bs-toggle="dropdown">
+                <i class="bi bi-list"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a href="index.html" class="dropdown-item">Home</a></li>
+                <li><a href="shop.html" class="dropdown-item">Shop</a></li>
+                <li><a href="about.html" class="dropdown-item">About</a></li>
+                <li><a href="contact.html" class="dropdown-item">Contact</a></li>
+                <li><a href="terms.html" class="dropdown-item">Terms</a></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li>
+                    <button class="btn user-btn-mobile" id="userMobile" style="
+                border-radius: 16px;
+                background-color: #171515;
+                color: #f1d5d5;
+                margin-top: 8px;
+                border: #f1d5d5 2px solid;
+                width: 35%;
+                margin-left: 64px;
+              ">
+                        <i class="bi bi-person-circle"></i>
+                    </button>
+                </li>
+                <br />
+                <li>
+                    <button class="btn cart-btn w-50 mx-5" id="cartMobile" style="border-radius: 16px">
+                        <i class="bi bi-cart3"></i>
+                    </button>
+                </li>
+                <br />
+                <li>
+                    <button class="btn login-btn w-75 mx-4" id="loginMobile" style="border-radius: 16px">
+                        LogIn
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel -->
+    <section class="shop-hero">
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="carousel-image-wrapper">
+                        <img src="image/hero_1.png" alt="Rose Gold Vintage Round" />
+                    </div>
+                    <div class="carousel-caption">
+                        <h2>Silver Gold Vintage</h2>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="carousel-image-wrapper">
+                        <img src="image/hero_2.png" alt="Premium Clubmaster" />
+                    </div>
+                    <div class="carousel-caption">
+                        <h2>Premium Clubmaster</h2>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="carousel-image-wrapper">
+                        <img src="image/hero_3.png" alt="Vibrant Green Round" />
+                    </div>
+                    <div class="carousel-caption">
+                        <h2>Vibrant Green</h2>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="carousel-image-wrapper">
+                        <img src="image/hero_4.png" alt="Classic Browline" />
+                    </div>
+                    <div class="carousel-caption">
+                        <h2>Classic Browline</h2>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="carousel-image-wrapper">
+                        <img src="image/hero_5.png" alt="Crystal Clear Round" />
+                    </div>
+                    <div class="carousel-caption">
+                        <h2>Crystal Clear</h2>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Top Sellers Section -->
+    <section class="product-section" id="top-sellers">
+        <div class="section-header">
+            <h2>Top Sellers</h2>
+            <div class="section-divider"></div>
+            <p>Our most popular frames loved by thousands</p>
+        </div>
+
+        <div class="products-scroll-container">
+            <button class="scroll-btn scroll-btn-left" onclick="scrollProducts('top-sellers', -1)">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <div class="products-wrapper" id="top-sellers-wrapper">
+                <!-- Products will be generated by JavaScript -->
+            </div>
+
+            <button class="scroll-btn scroll-btn-right" onclick="scrollProducts('top-sellers', 1)">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- New Arrivals Section -->
+    <section class="product-section" id="new-arrivals">
+        <div class="section-header">
+            <h2>New Arrivals</h2>
+            <div class="section-divider"></div>
+            <p>Fresh styles just landed this season</p>
+        </div>
+
+        <div class="products-scroll-container">
+            <button class="scroll-btn scroll-btn-left" onclick="scrollProducts('new-arrivals', -1)">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <div class="products-wrapper" id="new-arrivals-wrapper">
+                <!-- Products will be generated by JavaScript -->
+            </div>
+
+            <button class="scroll-btn scroll-btn-right" onclick="scrollProducts('new-arrivals', 1)">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Round Frames Section -->
+    <section class="product-section" id="round-frames">
+        <div class="section-header">
+            <h2>Round Frames</h2>
+            <div class="section-divider"></div>
+            <p>Timeless circular designs for every face</p>
+        </div>
+
+        <div class="products-scroll-container">
+            <button class="scroll-btn scroll-btn-left" onclick="scrollProducts('round-frames', -1)">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <div class="products-wrapper" id="round-frames-wrapper">
+                <!-- Products will be generated by JavaScript -->
+            </div>
+
+            <button class="scroll-btn scroll-btn-right" onclick="scrollProducts('round-frames', 1)">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Square Frames Section -->
+    <section class="product-section" id="square-frames">
+        <div class="section-header">
+            <h2>Square Frames</h2>
+            <div class="section-divider"></div>
+            <p>Sharp angles and modern sophistication</p>
+        </div>
+
+        <div class="products-scroll-container">
+            <button class="scroll-btn scroll-btn-left" onclick="scrollProducts('square-frames', -1)">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <div class="products-wrapper" id="square-frames-wrapper">
+                <!-- Products will be generated by JavaScript -->
+            </div>
+
+            <button class="scroll-btn scroll-btn-right" onclick="scrollProducts('square-frames', 1)">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Sunglasses Section -->
+    <section class="product-section" id="sunglasses">
+        <div class="section-header">
+            <h2>Sunglasses</h2>
+            <div class="section-divider"></div>
+            <p>Premium protection with unmatched style</p>
+        </div>
+
+        <div class="products-scroll-container">
+            <button class="scroll-btn scroll-btn-left" onclick="scrollProducts('sunglasses', -1)">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+
+            <div class="products-wrapper" id="sunglasses-wrapper">
+                <!-- Products will be generated by JavaScript -->
+            </div>
+
+            <button class="scroll-btn scroll-btn-right" onclick="scrollProducts('sunglasses', 1)">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer Navigation -->
+    <footer class="shop-footer-nav">
+        <div class="footer-nav-grid">
+            <div class="footer-nav-section">
+                <h3>Shop by Style</h3>
+                <ul>
+                    <li><a href="#top-sellers">Top Sellers</a></li>
+                    <li><a href="#new-arrivals">New Arrivals</a></li>
+                    <li><a href="#round-frames">Round Frames</a></li>
+                    <li><a href="#square-frames">Square Frames</a></li>
+                    <li><a href="#sunglasses">Sunglasses</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-nav-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="terms.html#shipping">Shipping Info</a></li>
+                    <li><a href="terms.html#returns">Returns</a></li>
+                    <li><a href="terms.html#warranty">Warranty</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-nav-section">
+                <h3>About frames</h3>
+                <ul>
+                    <li><a href="about.html#Our-story">Our Story</a></li>
+                    <li><a href="about.html#Our-values">Our Values</a></li>
+                    <li><a href="about.html#Our-teams">Our Team</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-nav-section">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">YouTube</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="gsap/gsap.min.js"></script>
+    <script src="gsap/ScrollTrigger.min.js"></script>
+    <script src="home/navigation.js"></script>
+    <script src="shop/shop.js"></script>
+</body>
+
+</html>

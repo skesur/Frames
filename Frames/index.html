@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - frames</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="home/home.css" />
+  <link rel="stylesheet" href="home/hero.css" />
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="navbar-brand nav-logo">
+      <img src="image/frames_white_logo_svg.svg" alt="frames logo" width="65px" />
+      <h1>frames</h1>
+    </div>
+
+    <div class="nav-body d-none d-lg-flex">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="shop.html">Shop</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="about.html">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contact.html">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="terms.html">Terms</a>
+        </li>
+        <li class="nav-item">
+          <button class="btn user-btn" id="user">
+            <i class="bi bi-person-circle"></i>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn cart-btn" id="cart">
+            <i class="bi bi-cart3"></i>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn login-btn" id="login">LogIn</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="dropdown nav-dropdown d-lg-none">
+      <button class="dropdown-toggle-btn" data-bs-toggle="dropdown">
+        <i class="bi bi-list"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a href="index.html" class="dropdown-item">Home</a></li>
+        <li><a href="shop.html" class="dropdown-item">Shop</a></li>
+        <li><a href="about.html" class="dropdown-item">About</a></li>
+        <li><a href="contact.html" class="dropdown-item">Contact</a></li>
+        <li><a href="terms.html" class="dropdown-item">Terms</a></li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <button class="btn user-btn-mobile" id="userMobile" style="
+                border-radius: 16px;
+                background-color: #171515;
+                color: #f1d5d5;
+                margin-top: 8px;
+                border: #f1d5d5 2px solid;
+                width: 35%;
+                margin-left: 64px;
+              ">
+            <i class="bi bi-person-circle"></i>
+          </button>
+        </li>
+        <br />
+        <li>
+          <button class="btn cart-btn w-50 mx-5" id="cartMobile" style="border-radius: 16px">
+            <i class="bi bi-cart3"></i>
+          </button>
+        </li>
+        <br />
+        <li>
+          <button class="btn login-btn w-75 mx-4" id="loginMobile" style="border-radius: 16px">
+            LogIn
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-wrapper">
+    <!-- Background Video with Gradient Overlay -->
+    <div class="video-background">
+      <video id="hero-video" autoplay muted loop playsinline>
+        <source src="video/frames-product.mp4" type="video/mp4" />
+      </video>
+      <div class="video-gradient"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <!-- Main Hero -->
+      <div class="hero-main">
+        <div class="hero-tag">
+          <span class="tag-dot"></span>
+          <span class="tag-text">Premium Eyewear Collection</span>
+        </div>
+        
+        <h1 class="hero-title">
+          <span class="title-line">
+            <span class="word">Define</span>
+            <span class="word gradient-text">Your</span>
+          </span>
+          <span class="title-line">
+            <span class="word">Vision</span>
+            <span class="word">with</span>
+            <span class="word word-frames">frames</span>
+          </span>
+        </h1>
+        
+        <p class="hero-description">
+          Experience eyewear crafted with precision, designed for elegance, 
+          and built to transform how you see the world
+        </p>
+
+        <div class="hero-cta">
+          <button class="primary-btn" onclick="window.location.href='shop.html'">
+            <span class="btn-text">Explore Collection</span>
+            <span class="btn-icon">
+              <i class="bi bi-arrow-right"></i>
+            </span>
+          </button>
+          <button class="secondary-btn" onclick="window.location.href='about.html'">
+            <span class="btn-text">Our Story</span>
+          </button>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number">10K+</div>
+            <div class="stat-label">Happy Customers</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Premium Designs</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number">4.9★</div>
+            <div class="stat-label">Customer Rating</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Product Cards -->
+      <div class="floating-cards">
+        <div class="product-card card-1" data-speed="0.5">
+          <img src="image/t_s_1.png" alt="Product 1" />
+          <div class="card-info">
+            <h4>Vintage Round</h4>
+            <p>₹2,499</p>
+          </div>
+        </div>
+        <div class="product-card card-2" data-speed="0.3">
+          <img src="image/t_s_2.png" alt="Product 2" />
+          <div class="card-info">
+            <h4>Clubmaster</h4>
+            <p>₹2,799</p>
+          </div>
+        </div>
+        <div class="product-card card-3" data-speed="0.7">
+          <img src="image/t_s_4.png" alt="Product 3" />
+          <div class="card-info">
+            <h4>Vibrant Green</h4>
+            <p>₹2,999</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator">
+        <div class="scroll-line"></div>
+        <span class="scroll-text">Scroll to explore</span>
+      </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="hero-decoration">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-header-modern">
+      <span class="section-tag">Why Choose Us</span>
+      <h2 class="section-title-modern">Crafted for Excellence</h2>
+      <p class="section-description">Every detail matters in creating the perfect frame for you</p>
+    </div>
+
+    <div class="features-grid-modern">
+      <div class="feature-card-modern">
+        <div class="feature-icon-wrapper">
+          <i class="bi bi-gem"></i>
+        </div>
+        <h3>Premium Materials</h3>
+        <p>High-quality acetate and titanium, designed to last a lifetime with proper care.</p>
+      </div>
+      
+      <div class="feature-card-modern">
+        <div class="feature-icon-wrapper">
+          <i class="bi bi-tools"></i>
+        </div>
+        <h3>Precision Engineering</h3>
+        <p>Every hinge is crafted with precision for the perfect fit and durability.</p>
+      </div>
+      
+      <div class="feature-card-modern">
+        <div class="feature-icon-wrapper">
+          <i class="bi bi-award"></i>
+        </div>
+        <h3>Award Winning Design</h3>
+        <p>Recognized globally for timeless design that never goes out of style.</p>
+      </div>
+      
+      <div class="feature-card-modern">
+        <div class="feature-icon-wrapper">
+          <i class="bi bi-shield-check"></i>
+        </div>
+        <h3>1 Year Warranty</h3>
+        <p>Complete protection with comprehensive warranty and lifetime support.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA Section -->
+  <section class="final-cta-modern">
+    <div class="cta-content">
+      <h2 class="cta-title">Find Your Perfect Frame</h2>
+      <p class="cta-description">Join thousands who've discovered their signature style</p>
+      <button class="cta-button-large" onclick="window.location.href='shop.html'">
+        <span>Shop Collection</span>
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <img src="image/frames_white_logo_svg.svg" alt="frames logo" width="45px" />
+          <h2>frames</h2>
+        </div>
+        <p style="color: var(--secondary-text); margin-bottom: 1rem">
+          See the world differently with frames that match your style and personality.
+        </p>
+        <div class="social-links">
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-twitter"></i></a>
+          <a href="#"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="shop.html">All Frames</a></li>
+          <li><a href="shop.html#top-sellers">Top Sellers</a></li>
+          <li><a href="shop.html#new-arrivals">New Arrivals</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="terms.html">Terms & Policies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>
+        &copy; 2024 frames. All rights reserved. | Crafted with passion in Ahmedabad
+      </p>
+    </div>
+  </footer>
+
+  <script src="bootstrap/bootstrap.bundle.js"></script>
+  <script src="gsap/gsap.min.js"></script>
+  <script src="gsap/ScrollTrigger.min.js"></script>
+  <script src="home/navigation.js"></script>
+  <script src="home/hero.js"></script>
+</body>
+
+</html>
