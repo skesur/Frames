@@ -39,13 +39,8 @@ export const useCartStore = create(
 
       clearCart: () => set({ items: [] }),
 
-      get totalItems() {
-        return get().items.reduce((sum, i) => sum + i.quantity, 0)
-      },
-
-      get totalPrice() {
-        return get().items.reduce((sum, i) => sum + i.price * i.quantity, 0)
-      },
+      getTotalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
+      getTotalPrice: () => get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
     }),
     { name: 'frames-cart' }
   )
