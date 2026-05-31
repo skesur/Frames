@@ -16,15 +16,15 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/"             element={<Home />} />
-          <Route path="/shop"         element={<Shop />} />
-          <Route path="/product/:id"  element={<ProductDetail />} />
-          <Route path="/cart"         element={<Cart />} />
-          <Route path="/checkout"     element={<Checkout />} />
-          <Route path="/profile"      element={<Profile />} />
-          <Route path="/about"        element={<About />} />
-          <Route path="/contact"      element={<Contact />} />
-          <Route path="/terms"        element={<Terms />} />
+          <Route path="/"            element={<Home />}          />
+          <Route path="/shop"        element={<Shop />}          />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart"        element={<Cart />}          />
+          <Route path="/checkout"    element={<Checkout />}      />
+          <Route path="/profile"     element={<Profile />}       />
+          <Route path="/about"       element={<About />}         />
+          <Route path="/contact"     element={<Contact />}       />
+          <Route path="/terms"       element={<Terms />}         />
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>

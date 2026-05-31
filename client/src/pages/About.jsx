@@ -1,169 +1,244 @@
 import { useRef, useEffect } from 'react'
-import SectionLabel          from '@/components/ui/SectionLabel'
-import Button                from '@/components/ui/Button'
+import { Link } from 'react-router-dom'
+import {
+  BookOpen, Eye, Target, Gem, Users,
+  Star, Palette, Shield, Recycle, ArrowRight,
+} from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+import { cn } from '@/lib/utils'
 
 const VALUES = [
-  { num: '01', label: 'Precision',  body: 'Every lens ground to exact optical specification. We don\'t approximate.' },
-  { num: '02', label: 'Aesthetic',  body: 'Design living at the edge where luxury fashion meets the future.' },
-  { num: '03', label: 'Durability', body: 'Materials chosen to outlast the trend. Built for the long run.' },
-  { num: '04', label: 'Inclusion',  body: 'Every power, every face shape, every budget. Vision for all.' },
+  {
+    Icon: Star,
+    title: 'Quality First',
+    body:  'Premium materials and meticulous craftsmanship in every frame we create.',
+  },
+  {
+    Icon: Palette,
+    title: 'Design Excellence',
+    body:  'Innovative designs that blend bold style with everyday functionality.',
+  },
+  {
+    Icon: Shield,
+    title: 'Sustainability',
+    body:  'Committed to eco-friendly practices and responsible sourcing at every step.',
+  },
+  {
+    Icon: Recycle,
+    title: 'Customer Focus',
+    body:  'Your satisfaction and vision clarity are at the heart of everything we do.',
+  },
 ]
 
-const PROOF = [
-  { value: '2019',  label: 'Founded'       },
-  { value: '500+',  label: 'Frame Styles'  },
-  { value: '10K+',  label: 'Customers'     },
-  { value: '4.9★',  label: 'Avg Rating'    },
-]
+function SectionHeader({ Icon, title, className }) {
+  return (
+    <div className={cn('flex items-center gap-3 mb-4', className)}>
+      <Icon size={22} strokeWidth={1.75} className="text-ember shrink-0" />
+      <h2 className="font-syne font-bold text-2xl md:text-3xl text-gradient leading-tight">
+        {title}
+      </h2>
+    </div>
+  )
+}
+
+function SectionRule() {
+  return (
+    <div
+      className="h-px w-full mb-10 md:mb-12"
+      style={{ background: 'linear-gradient(to right, rgba(255,107,53,0.55), rgba(255,107,53,0.08), transparent)' }}
+    />
+  )
+}
+
+function GradientIcon({ Icon, size = 22 }) {
+  return (
+    <div
+      className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-6"
+      style={{ background: 'var(--cyber-gradient)' }}
+    >
+      <Icon size={size} strokeWidth={1.75} className="text-void" />
+    </div>
+  )
+}
+
+function GlassCard({ children, className }) {
+  return (
+    <div
+      className={cn(
+        'rounded-xl border border-white/[0.07] bg-white/[0.02] p-8 md:p-10',
+        'transition-all duration-300 hover:border-violet/25 hover:bg-white/[0.035]',
+        className
+      )}
+    >
+      {children}
+    </div>
+  )
+}
 
 export default function About() {
   const heroRef    = useRef(null)
-  const proofRef   = useRef(null)
   const storyRef   = useRef(null)
+  const visionRef  = useRef(null)
   const valuesRef  = useRef(null)
-  const { fade, reveal, stagger } = useScrollAnimation()
+  const teamRef    = useRef(null)
+  const ctaRef     = useRef(null)
+  const { reveal, fade, stagger } = useScrollAnimation()
 
   useEffect(() => {
-    fade(heroRef,   { y: 40, duration: 0.9 })
-    reveal(proofRef,  { y: 30, duration: 0.8 })
-    reveal(storyRef,  { y: 30, duration: 0.8 })
-    stagger(valuesRef, '.value-card', { stagger: 0.1, y: 30, duration: 0.7 })
+    reveal(heroRef,   { y: 36, duration: 0.85 })
+    reveal(storyRef,  { y: 40, duration: 0.8 })
+    stagger(visionRef, '.about-card', { stagger: 0.14, y: 36, duration: 0.75 })
+    stagger(valuesRef, '.value-card', { stagger: 0.1, y: 32, duration: 0.7 })
+    reveal(teamRef,   { y: 36, duration: 0.8 })
+    fade(ctaRef,      { y: 40, duration: 0.9 })
   }, [])
 
   return (
-    <div className="bg-void text-ghost">
+    <div className="bg-void min-h-screen">
 
-      {/* ── Hero ── */}
-      <section className="pt-40 pb-24 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(155,92,246,0.07) 0%, transparent 60%)' }} />
-
-        <div ref={heroRef} className="frame-container relative z-10">
-          <SectionLabel color="violet" className="mb-7">Our Story</SectionLabel>
+      {/* ── Page hero ── */}
+      <section className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(155,92,246,0.12) 0%, transparent 55%)' }}
+        />
+        <div ref={heroRef} className="frame-container relative text-center">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-violet/80 mb-5 block">
+            Who We Are
+          </span>
           <h1
-            className="font-syne font-extrabold text-ghost uppercase leading-[1.0] mb-7"
-            style={{ fontSize: 'clamp(2.6rem, 5vw, 5rem)', letterSpacing: '-0.03em' }}
+            className="font-syne font-extrabold text-ghost mb-5"
+            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', letterSpacing: '-0.03em' }}
           >
-            Vision Meets<br />
-            <span className="text-gradient">Style.</span>
+            About <span className="text-gradient">Us</span>
           </h1>
-          <p className="font-dm text-ghost-muted text-base md:text-lg leading-relaxed max-w-xl">
-            Frames was born from a simple belief: eyewear shouldn't be an afterthought.
-            It should be the statement. We design for those who see the world through a
-            different lens — literally and figuratively.
+          <div
+            className="h-[3px] w-28 mx-auto rounded-full"
+            style={{ background: 'var(--cyber-gradient)' }}
+          />
+        </div>
+      </section>
+
+      {/* ── Our Story ── */}
+      <section className="pb-20 md:pb-28">
+        <div ref={storyRef} className="frame-container max-w-3xl">
+          <SectionHeader Icon={BookOpen} title="Our Story" />
+          <SectionRule />
+          <div className="flex flex-col gap-6 font-dm text-sm md:text-base text-ghost/60 leading-relaxed">
+            <p>
+              Founded in 2020, Frames began as a small boutique eyewear shop with a big vision.
+              What started as a passion project has grown into a premier destination for premium
+              eyewear that combines style, quality, and affordability.
+            </p>
+            <p>
+              We believe that eyewear is more than just a necessity — it&apos;s a fashion statement,
+              an expression of individuality, and a way to see the world differently. Every frame
+              in our collection is carefully curated to help you find the perfect match for your
+              unique style.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Vision & Mission ── */}
+      <section className="pb-20 md:pb-28">
+        <div ref={visionRef} className="frame-container grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <GlassCard className="about-card text-center">
+            <GradientIcon Icon={Eye} />
+            <h3 className="font-syne font-bold text-xl md:text-2xl text-ghost mb-4">Our Vision</h3>
+            <p className="font-dm text-sm text-ghost/55 leading-relaxed max-w-sm mx-auto">
+              To make premium eyewear accessible to everyone while championing sustainability
+              and ethical practices in everything we create.
+            </p>
+          </GlassCard>
+
+          <GlassCard className="about-card text-center">
+            <GradientIcon Icon={Target} />
+            <h3 className="font-syne font-bold text-xl md:text-2xl text-ghost mb-4">Our Mission</h3>
+            <p className="font-dm text-sm text-ghost/55 leading-relaxed max-w-sm mx-auto">
+              To provide exceptional eyewear products and service, creating frames that make
+              people feel confident, stylish, and truly themselves.
+            </p>
+          </GlassCard>
+        </div>
+      </section>
+
+      {/* ── Our Values ── */}
+      <section className="pb-20 md:pb-28 relative">
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-px pointer-events-none"
+          style={{ background: 'linear-gradient(to right, transparent, rgba(155,92,246,0.25), transparent)' }}
+        />
+        <div className="frame-container pt-4">
+          <SectionHeader Icon={Gem} title="Our Values" />
+          <SectionRule />
+
+          <div
+            ref={valuesRef}
+            className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-6"
+          >
+            {VALUES.map(({ Icon, title, body }) => (
+              <GlassCard key={title} className="value-card text-center group">
+                <div className="mb-5 flex justify-center">
+                  <div className="w-11 h-11 rounded-lg flex items-center justify-center bg-ember/10 border border-ember/20 group-hover:bg-ember/15 transition-colors duration-300">
+                    <Icon size={20} strokeWidth={1.75} className="text-ember" />
+                  </div>
+                </div>
+                <h3 className="font-syne font-semibold text-lg text-ghost mb-3">{title}</h3>
+                <p className="font-dm text-sm text-ghost/50 leading-relaxed">{body}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Our Team ── */}
+      <section className="pb-20 md:pb-28">
+        <div ref={teamRef} className="frame-container max-w-3xl">
+          <SectionHeader Icon={Users} title="Our Team" />
+          <SectionRule />
+          <p className="font-dm text-sm md:text-base text-ghost/60 leading-relaxed">
+            Behind every frame is a passionate team of designers, craftsmen, and innovators
+            dedicated to bringing you the best eyewear experience. From our skilled artisans
+            who handcraft each piece to our customer support team ready to help you find your
+            perfect fit — we&apos;re here for you every step of the way.
           </p>
         </div>
       </section>
 
-      {/* ── Proof numbers ── */}
-      <section className="border-t border-b border-white/[0.05]">
-        <div ref={proofRef} className="frame-container">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.05]">
-            {PROOF.map(({ value, label }) => (
-              <div key={label} className="py-10 px-6 text-center">
-                <div className="font-syne font-bold text-3xl text-ghost mb-1">{value}</div>
-                <div className="font-mono text-[10px] text-ghost-muted uppercase tracking-widest">{label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Story section ── */}
-      <section className="py-28">
-        <div ref={storyRef} className="frame-container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-
-            <div>
-              <SectionLabel color="ember" className="mb-7">The Philosophy</SectionLabel>
-              <h2
-                className="font-syne font-bold text-ghost leading-tight mb-6"
-                style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
-              >
-                Cyberpunk Luxury,<br />Redefined
-              </h2>
-              <div className="space-y-4">
-                <p className="font-dm text-sm text-ghost-muted leading-relaxed">
-                  We took the raw energy of cyberpunk aesthetics and filtered it through luxury
-                  craftsmanship. The result is eyewear that feels both futuristic and timeless.
-                </p>
-                <p className="font-dm text-sm text-ghost-muted leading-relaxed">
-                  Every frame starts as a concept sketch. Material testing, ergonomic refinement,
-                  optical validation — each step obsessed over before a frame reaches you.
-                </p>
-              </div>
-            </div>
-
-            <div className="relative">
-              {/* Image container with styled border */}
-              <div
-                className="rounded-lg overflow-hidden"
-                style={{ border: '1px solid rgba(255,255,255,0.06)', background: '#0d0d0d' }}
-              >
-                <img
-                  src="/assets/images/hero_1.png"
-                  alt="Frames craftsmanship"
-                  className="w-full h-auto p-12 object-contain"
-                />
-              </div>
-              {/* Subtle violet glow behind */}
-              <div className="absolute -inset-4 rounded-xl pointer-events-none -z-10"
-                style={{ background: 'radial-gradient(ellipse at center, rgba(155,92,246,0.12) 0%, transparent 70%)' }} />
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── Values ── */}
-      <section className="py-24 border-t border-white/[0.05]">
-        <div className="frame-container">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
-            <div>
-              <SectionLabel color="teal" className="mb-5">What We Stand For</SectionLabel>
-              <h2
-                className="font-syne font-bold text-ghost"
-                style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
-              >
-                Core Values
-              </h2>
-            </div>
-          </div>
-
-          <div ref={valuesRef} className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/[0.04] rounded-lg overflow-hidden border border-white/[0.04]">
-            {VALUES.map(({ num, label, body }) => (
-              <div
-                key={label}
-                className="value-card bg-void p-8 hover:bg-[#0d0d0d] transition-colors duration-300 group"
-              >
-                <div className="flex items-start justify-between mb-5">
-                  <span className="font-mono text-[10px] text-ghost-muted/50">{num}</span>
-                  <div className="w-4 h-px mt-2"
-                    style={{ background: 'rgba(155,92,246,0.4)' }} />
-                </div>
-                <h3 className="font-syne font-semibold text-lg text-ghost mb-2">{label}</h3>
-                <p className="font-dm text-sm text-ghost-muted leading-relaxed">{body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── CTA ── */}
-      <section className="py-24 border-t border-white/[0.05]">
-        <div className="frame-container flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <h2 className="font-syne font-bold text-2xl md:text-3xl text-ghost mb-2">
-              Ready to find yours?
-            </h2>
-            <p className="font-dm text-ghost-muted text-sm">
-              Browse 500+ frames crafted for every vision.
-            </p>
+      <section className="pb-24 md:pb-32">
+        <div ref={ctaRef} className="frame-container">
+          <div
+            className="relative rounded-2xl border border-white/[0.08] overflow-hidden px-8 py-14 md:py-16 text-center"
+            style={{
+              background: 'linear-gradient(135deg, rgba(155,92,246,0.14) 0%, rgba(8,8,8,0.95) 45%, rgba(255,107,53,0.08) 100%)',
+            }}
+          >
+            <div
+              className="absolute inset-0 pointer-events-none opacity-40"
+              style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(155,92,246,0.2) 0%, transparent 60%)' }}
+            />
+            <div className="relative">
+              <h2
+                className="font-syne font-bold text-ghost mb-4"
+                style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}
+              >
+                Ready to Find Your{' '}
+                <span className="text-gradient">Perfect Frame?</span>
+              </h2>
+              <p className="font-dm text-sm md:text-base text-ghost/55 max-w-md mx-auto mb-8 leading-relaxed">
+                Explore our collection and discover eyewear that&apos;s uniquely you.
+              </p>
+              <Link
+                to="/shop"
+                className="inline-flex items-center gap-2 bg-ember hover:bg-ember-dark text-void font-dm font-semibold text-sm px-7 py-3 rounded-full transition-all duration-200 hover:scale-[1.02]"
+              >
+                Shop Now
+                <ArrowRight size={16} strokeWidth={2.5} />
+              </Link>
+            </div>
           </div>
-          <Button href="/shop" size="lg" variant="primary">
-            Shop Collection
-          </Button>
         </div>
       </section>
 

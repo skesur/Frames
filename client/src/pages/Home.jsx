@@ -1,13 +1,4 @@
-import Hero     from '@/components/sections/Hero'
-import Features from '@/components/sections/Features'
-import CTA      from '@/components/sections/CTA'
-
+// pages/Home.jsx
 export default function Home() {
-  return (
-    <>
-      <Hero />
-      <Features />
-      <CTA />
-    </>
-  )
+  return <div className="min-h-screen bg-void" />
 }

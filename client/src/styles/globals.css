@@ -1,138 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono:wght@400;700&family=Courier+Prime:wght@400;700&display=swap');
 
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────
-   TAILWIND V4 THEME — replaces tailwind.config.js
+   THEME — filled after design reference
    ───────────────────────────────────────── */
 @theme {
+  --color-void:        #080808;
+  --color-violet:      #9B5CF6;
+  --color-violet-dark: #7C3AED;
+  --color-ember:       #FF6B35;
+  --color-ember-dark:  #E55A27;
+  --color-teal:        #00F5C4;
+  --color-ghost:       #F0EEF8;
+  --color-ghost-muted: #A8A6B4;
 
-  /* ── Colors ── */
-  --color-void:          #080808;
-  --color-violet:        #9B5CF6;
-  --color-violet-dark:   #7C3AED;
-  --color-violet-light:  #B07EF8;
-  --color-ember:         #FF6B35;
-  --color-ember-dark:    #E55A27;
-  --color-teal:          #00F5C4;
-  --color-ghost:         #F0EEF8;
-  --color-ghost-muted:   #A8A6B4;
-
-  /* ── Fonts ── */
   --font-syne: 'Syne', sans-serif;
   --font-dm:   'DM Sans', sans-serif;
   --font-mono: 'Space Mono', monospace;
+  --font-logo: 'Courier Prime', serif;
 
-  /* ── Screens (breakpoints) ── */
   --breakpoint-xs: 480px;
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
-
-  /* ── Animations ── */
-  --animate-fade-in:    fadeIn 0.6s ease forwards;
-  --animate-glow-pulse: glowPulse 2s ease-in-out infinite;
-
-  /* ── Keyframes ── */
-  @keyframes fadeIn {
-    0%   { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes glowPulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(155, 92, 246, 0.3); }
-    50%       { box-shadow: 0 0 40px rgba(155, 92, 246, 0.6); }
-  }
 }
 
 /* ─────────────────────────────────────────
-   CSS CUSTOM PROPERTIES (for GSAP + Three.js)
+   CSS VARIABLES — for GSAP and Three.js
    ───────────────────────────────────────── */
 :root {
-  --void:           #080808;
-  --violet:         #9B5CF6;
-  --violet-dark:    #7C3AED;
-  --ember:          #FF6B35;
-  --teal:           #00F5C4;
-  --ghost:          #F0EEF8;
-  --ghost-muted:    #A8A6B4;
-  --cyber-gradient: linear-gradient(135deg, #9B5CF6, #7C3AED, #FF6B35);
-
-  --fs-xs:   0.75rem;
-  --fs-sm:   0.875rem;
-  --fs-base: 1rem;
-  --fs-lg:   1.125rem;
-  --fs-xl:   1.25rem;
-  --fs-2xl:  1.5rem;
-  --fs-3xl:  1.875rem;
-  --fs-4xl:  2.25rem;
-  --fs-5xl:  3rem;
-  --fs-6xl:  3.75rem;
-  --fs-7xl:  4.5rem;
-
-  --section-padding:   6rem;
-  --container-max:     1280px;
-  --ease-out-expo:     cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out-expo:  cubic-bezier(0.87, 0, 0.13, 1);
-  --transition-base:   300ms var(--ease-out-expo);
+  --void:            #080808;
+  --violet:          #9B5CF6;
+  --violet-dark:     #7C3AED;
+  --ember:           #FF6B35;
+  --teal:            #00F5C4;
+  --ghost:           #F0EEF8;
+  --ghost-muted:     #A8A6B4;
+  --cyber-gradient:  linear-gradient(135deg, #9B5CF6, #7C3AED, #FF6B35);
+  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─────────────────────────────────────────
-   BASE RESETS
+   RESET — must live in @layer base so Tailwind utilities can override
    ───────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    background: var(--void);
+    color: var(--ghost);
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    background: var(--void);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
 }
 
-html {
-  background-color: var(--void);
-  color: var(--ghost);
-  scroll-behavior: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  font-size: var(--fs-base);
-  line-height: 1.6;
-  overflow-x: hidden;
-  background-color: var(--void);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Syne', sans-serif;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-code, pre, .font-data {
-  font-family: 'Space Mono', monospace;
-}
+::selection { background: rgba(155,92,246,0.25); }
 
 /* ─────────────────────────────────────────
-   SCROLLBAR
-   ───────────────────────────────────────── */
-::-webkit-scrollbar        { width: 4px; }
-::-webkit-scrollbar-track  { background: var(--void); }
-::-webkit-scrollbar-thumb  { background: var(--violet-dark); border-radius: 2px; }
-
-/* ─────────────────────────────────────────
-   SELECTION
-   ───────────────────────────────────────── */
-::selection {
-  background-color: rgba(155, 92, 246, 0.3);
-  color: var(--ghost);
-}
-
-/* ─────────────────────────────────────────
-   UTILITY CLASSES
+   UTILITIES
    ───────────────────────────────────────── */
 @layer utilities {
 
+  /* Gradient text — use sparingly, one word per heading maximum */
   .text-gradient {
     background: var(--cyber-gradient);
     -webkit-background-clip: text;
@@ -140,75 +83,69 @@ code, pre, .font-data {
     background-clip: text;
   }
 
-  .border-gradient {
+  /* Frosted glass panel */
+  .glass {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  /* Gradient border */
+  .border-glow {
     border: 1px solid transparent;
     background:
-      linear-gradient(var(--void), var(--void)) padding-box,
+      linear-gradient(#080808, #080808) padding-box,
       var(--cyber-gradient) border-box;
   }
 
-  .glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .container-frame {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-
-  .bg-hero-radial {
-    background-image: radial-gradient(
-      ellipse 80% 60% at 50% 0%,
-      rgba(155, 92, 246, 0.2) 0%,
-      transparent 70%
-    );
-  }
-
-  .bg-cyber-gradient {
-    background-image: linear-gradient(135deg, #9b5cf6, #7c3aed, #ff6b35);
-  }
-
-  /* Reliable hardcoded container — use this everywhere */
   .frame-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1160px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   @media (min-width: 768px) {
     .frame-container {
-      padding-left: 4rem;
-      padding-right: 4rem;
+      padding-left: 3rem;
+      padding-right: 3rem;
     }
   }
 
-  /* Input field standard style — use on all form inputs */
-  .frame-input {
+  /* Max-width centered container */
+  .site-container {
     width: 100%;
-    background: #0f0f0f;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    padding: 0.875rem 1.25rem;
+    max-width: 1160px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .site-container {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+
+  /* Form inputs — always visible */
+  .field {
+    width: 100%;
+    background: #0e0e0e;
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 6px;
+    padding: 0.9rem 1.2rem;
     font-family: 'DM Sans', sans-serif;
     font-size: 0.9rem;
     color: #F0EEF8;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s;
     outline: none;
   }
 
-  .frame-input::placeholder {
-    color: rgba(168, 166, 180, 0.4);
-  }
-
-  .frame-input:focus {
-    border-color: rgba(155, 92, 246, 0.5);
-  }
+  .field::placeholder { color: rgba(168,166,180,0.35); }
+  .field:focus        { border-color: rgba(155,92,246,0.5); }
 }
-
