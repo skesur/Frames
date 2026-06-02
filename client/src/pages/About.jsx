@@ -103,7 +103,7 @@ export default function About() {
           style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(155,92,246,0.12) 0%, transparent 55%)' }}
         />
         <div ref={heroRef} className="frame-container relative text-center">
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-violet/80 mb-5 block">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-5 block">
             Who We Are
           </span>
           <h1

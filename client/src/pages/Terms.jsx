@@ -189,7 +189,7 @@ export default function Terms() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse at 50% 0%, rgba(255,107,53,0.1) 0%, transparent 55%)',
+              'radial-gradient(ellipse at 50% 0%, rgba(155,92,246,0.12) 0%, transparent 55%)',
           }}
         />
         <div ref={heroRef} className="frame-container relative text-center">

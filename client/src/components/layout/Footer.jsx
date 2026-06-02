@@ -5,6 +5,8 @@ const SHOP_LINKS = [
   { label: 'All Frames',    href: '/shop'                          },
   { label: 'Top Sellers',   href: '/shop?category=top-sellers'     },
   { label: 'New Arrivals',  href: '/shop?category=new-arrivals'    },
+  { label: 'Round Frames',  href: '/shop?category=round-frames'    },
+  { label: 'Square Frames', href: '/shop?category=square-frames'   },
   { label: 'Sunglasses',    href: '/shop?category=sunglasses'      },
 ]
 

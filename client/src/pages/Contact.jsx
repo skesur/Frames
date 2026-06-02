@@ -163,7 +163,7 @@ export default function Contact() {
       <section className="relative pt-28 md:pt-32 pb-14 md:pb-16 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(255,107,53,0.1) 0%, transparent 55%)' }}
+          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(155,92,246,0.12) 0%, transparent 55%)' }}
         />
         <div ref={heroRef} className="frame-container relative text-center">
           <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-5 block">
