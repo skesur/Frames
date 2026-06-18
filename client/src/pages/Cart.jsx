@@ -1,5 +1,6 @@
 import { useState }          from 'react'
 import { Link }              from 'react-router-dom'
+import { useModalLock } from '@/hooks/useModalLock'
 import {
   ShoppingBag, Trash2, Plus, Minus,
   ShoppingCart, X, Truck, CreditCard,
@@ -17,6 +18,7 @@ const DELIVERY_PRICES = { standard: 600, express: 1300, overnight: 2500 }
 
 /* ── Order Modal ───────────────────────── */
 function OrderModal({ onClose, onSuccess }) {
+  useModalLock()
   const { items, clearCart }    = useCartStore()
   const { isAuthenticated, user } = useAuthStore()
 
@@ -98,7 +100,12 @@ function OrderModal({ onClose, onSuccess }) {
       style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.08] bg-[#0c0c0c]">
+      <div
+        data-lenis-prevent
+        onWheel={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        className="modal-scroll w-full sm:max-w-2xl max-h-[92dvh] min-h-0 overflow-y-auto overscroll-contain rounded-t-2xl sm:rounded-2xl border border-white/[0.08] bg-[#0c0c0c]"
+      >
 
         {/* Modal header */}
         <div className="sticky top-0 bg-[#0c0c0c] border-b border-white/[0.06] px-6 py-4 flex items-center justify-between z-10">

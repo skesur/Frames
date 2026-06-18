@@ -148,4 +148,10 @@
 
   .field::placeholder { color: rgba(168,166,180,0.35); }
   .field:focus        { border-color: rgba(155,92,246,0.5); }
+
+  .modal-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
 }

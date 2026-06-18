@@ -1,6 +1,7 @@
-import { Link }         from 'react-router-dom'
-import { ShoppingBag }  from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Lock, ShoppingBag }  from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
+import { useAuthStore } from '@/store/authStore'
 import { formatPrice }  from '@/lib/utils'
 import { cn }           from '@/lib/utils'
 
@@ -19,24 +20,36 @@ const BADGE_STYLES = {
 
 export default function ProductCard({ product, className }) {
   const addItem = useCartStore((s) => s.addItem)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const token = useAuthStore((s) => s.token)
+  const [authMessage, setAuthMessage] = useState(false)
+
+  useEffect(() => {
+    if (!authMessage) return undefined
+
+    const timer = setTimeout(() => setAuthMessage(false), 2400)
+    return () => clearTimeout(timer)
+  }, [authMessage])
 
   function handleAdd(e) {
     e.preventDefault()
     e.stopPropagation()
+
+    if (!isAuthenticated || !token) {
+      setAuthMessage(true)
+      return
+    }
+
     addItem(product)
   }
 
   const badgeStyle = BADGE_STYLES[product.badge] || 'bg-ghost/10 text-ghost-muted border-ghost/20'
 
   return (
-    <Link
-      to={`/product/${product._id}`}
-      className={cn(
+    <div className={cn(
         'group relative flex-shrink-0 w-56 md:w-64 rounded-xl overflow-hidden border border-white/[0.07] bg-white/[0.02] transition-all duration-300 hover:border-violet/25 hover:bg-white/[0.04] hover:-translate-y-1',
         className
-      )}
-      style={{ textDecoration: 'none' }}
-    >
+      )}>
       {/* Badge */}
       {product.badge && (
         <span
@@ -79,12 +92,40 @@ export default function ProductCard({ product, className }) {
 
           <button
             onClick={handleAdd}
-            className="w-8 h-8 rounded-full bg-violet hover:bg-violet-dark flex items-center justify-center transition-all duration-200 hover:scale-110 hover:shadow-[0_0_12px_rgba(155,92,246,0.4)]"
-            aria-label={`Add ${product.name} to cart`}
+            className={cn(
+              'w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110',
+              isAuthenticated && token
+                ? 'bg-violet hover:bg-violet-dark hover:shadow-[0_0_12px_rgba(155,92,246,0.4)]'
+                : 'bg-white/[0.06] border border-white/[0.1] hover:border-ember/60 hover:shadow-[0_0_12px_rgba(255,107,53,0.25)]'
+            )}
+            aria-label={
+              isAuthenticated && token
+                ? `Add ${product.name} to cart`
+                : 'Login required to add to cart'
+            }
           >
-            <ShoppingBag size={13} strokeWidth={2} className="text-white" />
+            {isAuthenticated && token ? (
+              <ShoppingBag size={13} strokeWidth={2} className="text-white" />
+            ) : (
+              <Lock size={13} strokeWidth={2} className="text-ember" />
+            )}
           </button>
         </div>
+
+        {authMessage && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="mt-3 rounded-lg border border-ember/25 bg-ember/10 px-3 py-2 shadow-[0_0_18px_rgba(255,107,53,0.12)]"
+          >
+            <p className="font-dm text-xs leading-snug text-ghost">
+              Login required to add frames to your cart.
+            </p>
+            <p className="font-mono text-[9px] uppercase tracking-widest text-ember/80 mt-1">
+              Sign in first
+            </p>
+          </div>
+        )}
 
         {/* Rating dots */}
         <div className="flex items-center gap-0.5 mt-2.5">
@@ -104,6 +145,6 @@ export default function ProductCard({ product, className }) {
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

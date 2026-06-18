@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { resetCartStorage, useCartStore } from '@/store/cartStore'
 
 export const useAuthStore = create(
   persist(
@@ -10,11 +11,14 @@ export const useAuthStore = create(
 
       setAuth: (user, token) => {
         localStorage.setItem('frames_token', token)
+        useCartStore.getState().loadCartFromServer()
         set({ user, token, isAuthenticated: true })
       },
 
       logout: () => {
         localStorage.removeItem('frames_token')
+        resetCartStorage()
+        useCartStore.setState({ items: [] })
         set({ user: null, token: null, isAuthenticated: false })
       },
 
@@ -24,7 +28,16 @@ export const useAuthStore = create(
     }),
     {
       name:       'frames-auth',
-      partialize: (state) => ({ user: state.user, token: state.token }),
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+      }),
+      merge: (persistedState, currentState) => ({
+        ...currentState,
+        ...persistedState,
+        isAuthenticated: Boolean(persistedState?.token),
+      }),
     }
   )
 )

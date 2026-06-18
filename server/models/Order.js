@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema(
 
     items: [
       {
-        product:  { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        product:  { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
         name:     String,
         price:    Number,
         quantity: { type: Number, default: 1 },
@@ -25,8 +25,8 @@ const orderSchema = new mongoose.Schema(
 
     lensCoating: {
       type:    String,
-      enum:    ['none', 'anti-glare', 'blue-light', 'photochromic'],
-      default: 'none',
+      enum:    ['standard', 'none', 'anti-glare', 'blue-light', 'photochromic'],
+      default: 'standard',
     },
 
     delivery: {
@@ -51,12 +51,11 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-// Auto-generate orderId before saving
-orderSchema.pre('save', function (next) {
+// Auto-generate orderId before saving.
+orderSchema.pre('save', function () {
   if (!this.orderId) {
     this.orderId = 'ORD' + Date.now()
   }
-  next()
 })
 
 export default mongoose.model('Order', orderSchema)
