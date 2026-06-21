@@ -5,6 +5,7 @@ import ProductCard                                   from '@/components/product/
 import api                                           from '@/lib/axios'
 import { cn }                                        from '@/lib/utils'
 import { fallbackProducts }                          from '@/data/products'
+import FrameColorCarousel from "../components/three/FrameColorCarousel"
 
 const CATEGORIES = [
   { id: 'all',           label: 'All Frames'    },
@@ -30,84 +31,6 @@ const HERO_SLIDES = [
   { img: '/assets/image/hero_4.png', label: 'Classic Browline'     },
   { img: '/assets/image/hero_5.png', label: 'Crystal Clear'        },
 ]
-
-/* Hero carousel */
-function ShopCarousel() {
-  const [current, setCurrent] = useState(0)
-  const total = HERO_SLIDES.length
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((p) => (p + 1) % total)
-    }, 3500)
-    return () => clearInterval(timer)
-  }, [total])
-
-  const prev = () => setCurrent((p) => (p - 1 + total) % total)
-  const next = () => setCurrent((p) => (p + 1) % total)
-
-  return (
-    <div className="relative w-full overflow-hidden bg-[#060606]"
-      style={{ height: 'clamp(260px, 38vw, 480px)' }}
-    >
-      {/* Slides */}
-      {HERO_SLIDES.map((slide, i) => (
-        <div
-          key={i}
-          className="absolute inset-0 flex items-center justify-center transition-opacity duration-700"
-          style={{ opacity: i === current ? 1 : 0 }}
-        >
-          {/* Glow */}
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse at center, rgba(155,92,246,0.1) 0%, transparent 65%)' }}
-          />
-          <img
-            src={slide.img}
-            alt={slide.label}
-            className="h-[75%] w-auto object-contain relative z-10"
-            style={{ filter: 'drop-shadow(0 20px 60px rgba(155,92,246,0.3))' }}
-          />
-          {/* Caption */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center z-10">
-            <p className="font-syne font-bold text-ghost text-lg md:text-2xl tracking-tight">
-              {slide.label}
-            </p>
-          </div>
-        </div>
-      ))}
-
-      {/* Controls */}
-      <button
-        onClick={prev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full glass flex items-center justify-center text-ghost/60 hover:text-ghost transition-colors"
-      >
-        <ChevronLeft size={18} />
-      </button>
-      <button
-        onClick={next}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full glass flex items-center justify-center text-ghost/60 hover:text-ghost transition-colors"
-      >
-        <ChevronRight size={18} />
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
-        {HERO_SLIDES.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            className="rounded-full transition-all duration-300"
-            style={{
-              width:  i === current ? 20 : 6,
-              height: 6,
-              background: i === current ? 'var(--violet)' : 'rgba(255,255,255,0.2)',
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
 
 /* Horizontal scroll section */
 function ProductRow({ title, subtitle, products, loading }) {
@@ -262,64 +185,64 @@ export default function Shop() {
   return (
     <div className="bg-void min-h-screen">
 
-      {/* Hero carousel */}
-      <div className="pt-16">
-        <ShopCarousel />
-      </div>
-
       {/* Search + filter bar */}
-      <div className="sticky top-16 z-40 bg-void/95 backdrop-blur-md border-b border-white/[0.05]">
-        <div className="frame-container py-4">
-          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+      <div className="pt-16">
+        <div className="sticky top-16 z-40 bg-void/95 backdrop-blur-md border-b border-white/[0.05]">
+          <div className="frame-container py-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
 
-            {/* Search input */}
-            <div className={cn(
-              'relative flex-1 max-w-md transition-all duration-200',
-              searchFocused && 'max-w-lg'
-            )}>
-              <Search
-                size={15}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ghost-muted pointer-events-none"
-              />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-                placeholder="Search frames..."
-                className="w-full bg-white/[0.04] border border-white/[0.08] rounded-full pl-9 pr-9 py-2.5 font-dm text-sm text-ghost placeholder:text-ghost-muted/40 focus:outline-none focus:border-violet/40 transition-colors"
-              />
-              {search && (
-                <button
-                  onClick={() => setSearch('')}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ghost-muted hover:text-ghost"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
+              {/* Search input */}
+              <div className={cn(
+                'relative flex-1 max-w-md transition-all duration-200',
+                searchFocused && 'max-w-lg'
+              )}>
+                <Search
+                  size={15}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ghost-muted pointer-events-none"
+                />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  onFocus={() => setSearchFocused(true)}
+                  onBlur={() => setSearchFocused(false)}
+                  placeholder="Search frames..."
+                  className="w-full bg-white/[0.04] border border-white/[0.08] rounded-full pl-9 pr-9 py-2.5 font-dm text-sm text-ghost placeholder:text-ghost-muted/40 focus:outline-none focus:border-violet/40 transition-colors"
+                />
+                {search && (
+                  <button
+                    onClick={() => setSearch('')}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ghost-muted hover:text-ghost"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
 
-            {/* Category pills */}
-            <div className="flex gap-2 overflow-x-auto pb-0.5" style={{ scrollbarWidth: 'none' }}>
-              {CATEGORIES.map(({ id, label }) => (
-                <button
-                  key={id}
-                  onClick={() => handleCategoryChange(id)}
-                  className={cn(
-                    'flex-shrink-0 font-dm text-xs px-4 py-2 rounded-full border transition-all duration-200',
-                    activeCategory === id
-                      ? 'bg-violet border-violet text-void font-semibold'
-                      : 'border-white/[0.1] text-ghost-muted hover:border-white/25 hover:text-ghost'
-                  )}
-                >
-                  {label}
-                </button>
-              ))}
+              {/* Category pills */}
+              <div className="flex gap-2 overflow-x-auto pb-0.5" style={{ scrollbarWidth: 'none' }}>
+                {CATEGORIES.map(({ id, label }) => (
+                  <button
+                    key={id}
+                    onClick={() => handleCategoryChange(id)}
+                    className={cn(
+                      'flex-shrink-0 font-dm text-xs px-4 py-2 rounded-full border transition-all duration-200',
+                      activeCategory === id
+                        ? 'bg-violet border-violet text-void font-semibold'
+                        : 'border-white/[0.1] text-ghost-muted hover:border-white/25 hover:text-ghost'
+                    )}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Hero carousel */}
+      {!isSearching && <FrameColorCarousel />}
 
       {/* Search results view */}
       {isSearching ? (

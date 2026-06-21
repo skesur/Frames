@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import api from '@/lib/axios'
 import { resetCartStorage, useCartStore } from '@/store/cartStore'
 
 export const useAuthStore = create(
@@ -15,7 +16,12 @@ export const useAuthStore = create(
         set({ user, token, isAuthenticated: true })
       },
 
-      logout: () => {
+      logout: async () => {
+        try {
+          await api.post('/auth/logout')
+        } catch {
+          // Local logout should still complete if the server is unreachable.
+        }
         localStorage.removeItem('frames_token')
         resetCartStorage()
         useCartStore.setState({ items: [] })

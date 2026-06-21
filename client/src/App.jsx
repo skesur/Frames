@@ -8,6 +8,7 @@ import Profile  from '@/pages/Profile'
 import About    from '@/pages/About'
 import Contact  from '@/pages/Contact'
 import Terms    from '@/pages/Terms'
+import Admin    from '@/pages/admin/Admin'
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/terms"   element={<Terms />}   />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   )
