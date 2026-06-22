@@ -67,7 +67,7 @@ export default function ProductCard({ product, className }) {
         <img
           src={product.images?.[0] || '/assets/image/hero_1.png'}
           alt={product.name}
-          className="h-36 w-auto object-contain transition-transform duration-500 group-hover:scale-110"
+          className="h-36 w-auto rounded-xl object-contain transition-transform duration-500 group-hover:scale-110"
           style={{ filter: 'drop-shadow(0 8px 20px rgba(155,92,246,0.15))' }}
         />
         {/* Hover glow */}

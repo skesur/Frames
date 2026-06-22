@@ -1,7 +1,7 @@
 import { useState }       from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Eye, EyeOff }    from 'lucide-react'
-import api                from '@/lib/axios'
+import api, { getApiErrorMessage } from '@/lib/axios'
 import { useAuthStore }   from '@/store/authStore'
 import { useCartStore }   from '@/store/cartStore'
 import { cn }             from '@/lib/utils'
@@ -71,10 +71,7 @@ export default function Login() {
       await loadCartFromServer()
       navigate('/profile')
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        'Cannot reach the login server. Please make sure the backend is running.'
-      )
+      setError(getApiErrorMessage(err))
     } finally {
       setLoading(false)
     }
@@ -106,10 +103,7 @@ export default function Login() {
       await loadCartFromServer()
       navigate('/')
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        'Cannot reach the registration server. Please make sure the backend is running.'
-      )
+      setError(getApiErrorMessage(err))
     } finally {
       setLoading(false)
     }

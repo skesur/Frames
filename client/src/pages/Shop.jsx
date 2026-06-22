@@ -24,14 +24,6 @@ const SECTIONS = [
   { id: 'sunglasses',    title: 'Sunglasses',    subtitle: 'Premium protection with unmatched style'      },
 ]
 
-const HERO_SLIDES = [
-  { img: '/assets/image/hero_1.png', label: 'Silver Gold Vintage'  },
-  { img: '/assets/image/hero_2.png', label: 'Premium Clubmaster'   },
-  { img: '/assets/image/hero_3.png', label: 'Vibrant Green'        },
-  { img: '/assets/image/hero_4.png', label: 'Classic Browline'     },
-  { img: '/assets/image/hero_5.png', label: 'Crystal Clear'        },
-]
-
 /* Horizontal scroll section */
 function ProductRow({ title, subtitle, products, loading }) {
   const scrollRef = useRef(null)

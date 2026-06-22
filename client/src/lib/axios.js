@@ -1,7 +1,23 @@
 import axios from 'axios'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+
+export const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, '')
+
+export function getApiErrorMessage(err) {
+  if (err.response?.data?.message) {
+    return err.response.data.message
+  }
+
+  if (!err.response || err.code === 'ERR_NETWORK') {
+    return `Backend not reachable at ${API_ORIGIN}. Start the server with "npm run dev" from the project root.`
+  }
+
+  return 'Something went wrong. Please try again.'
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: API_BASE_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
