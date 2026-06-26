@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link }     from 'react-router-dom'
 import {
-  LayoutDashboard, Package, ClipboardList, Users, ArrowLeft, ShieldCheck,
+  LayoutDashboard, Package, ClipboardList, Users, Mail, ArrowLeft, ShieldCheck,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -9,12 +9,14 @@ import AdminOverview from './AdminOverview'
 import AdminProducts from './AdminProducts'
 import AdminOrders   from './AdminOrders'
 import AdminUsers    from './AdminUsers'
+import AdminMessages from './AdminMessages'
 
 const TABS = [
   { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
   { id: 'products', label: 'Products', Icon: Package         },
   { id: 'orders',   label: 'Orders',   Icon: ClipboardList   },
   { id: 'users',    label: 'Users',    Icon: Users           },
+  { id: 'messages', label: 'Messages', Icon: Mail            },
 ]
 
 export default function AdminLayout() {
@@ -93,6 +95,7 @@ export default function AdminLayout() {
         {activeTab === 'products' && <AdminProducts />}
         {activeTab === 'orders'   && <AdminOrders />}
         {activeTab === 'users'    && <AdminUsers />}
+        {activeTab === 'messages' && <AdminMessages />}
       </main>
     </div>
   )

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link }               from 'react-router-dom'
 import { Lock, ShoppingBag }  from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
@@ -44,13 +45,15 @@ export default function ProductCard({ product, className }) {
   }
 
   const badgeStyle = BADGE_STYLES[product.badge] || 'bg-ghost/10 text-ghost-muted border-ghost/20'
+  const productPath = `/product/${product.slug || product._id}`
 
   return (
-    <div className={cn(
+    <div
+      className={cn(
         'group relative flex-shrink-0 w-56 md:w-64 rounded-xl overflow-hidden border border-white/[0.07] bg-white/[0.02] transition-all duration-300 hover:border-violet/25 hover:bg-white/[0.04] hover:-translate-y-1',
         className
-      )}>
-      {/* Badge */}
+      )}
+    >
       {product.badge && (
         <span
           className={cn(
@@ -62,28 +65,30 @@ export default function ProductCard({ product, className }) {
         </span>
       )}
 
-      {/* Image */}
-      <div className="relative bg-[#0d0d0d] h-44 flex items-center justify-center overflow-hidden">
-        <img
-          src={product.images?.[0] || '/assets/image/hero_1.png'}
-          alt={product.name}
-          className="h-36 w-auto rounded-xl object-contain transition-transform duration-500 group-hover:scale-110"
-          style={{ filter: 'drop-shadow(0 8px 20px rgba(155,92,246,0.15))' }}
-        />
-        {/* Hover glow */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at center, rgba(155,92,246,0.08) 0%, transparent 70%)' }}
-        />
-      </div>
+      <Link to={productPath} aria-label={`View ${product.name}`}>
+        <div className="relative bg-[#0d0d0d] h-44 flex items-center justify-center overflow-hidden">
+          <img
+            src={product.images?.[0] || '/assets/image/hero_1.png'}
+            alt={product.name}
+            className="h-36 w-auto rounded-xl object-contain transition-transform duration-500 group-hover:scale-110"
+            style={{ filter: 'drop-shadow(0 8px 20px rgba(155,92,246,0.15))' }}
+          />
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            style={{ background: 'radial-gradient(ellipse at center, rgba(155,92,246,0.08) 0%, transparent 70%)' }}
+          />
+        </div>
+      </Link>
 
-      {/* Info */}
       <div className="p-4">
-        <p className="font-mono text-[9px] text-ghost-muted uppercase tracking-widest mb-1.5">
-          {product.category.replace(/-/g, ' ')}
-        </p>
-        <h3 className="font-syne font-semibold text-sm text-ghost leading-snug mb-3 line-clamp-2">
-          {product.name}
-        </h3>
+        <Link to={productPath} aria-label={`View ${product.name}`}>
+          <p className="font-mono text-[9px] text-ghost-muted uppercase tracking-widest mb-1.5">
+            {product.category.replace(/-/g, ' ')}
+          </p>
+          <h3 className="font-syne font-semibold text-sm text-ghost leading-snug mb-3 line-clamp-2 group-hover:text-violet transition-colors">
+            {product.name}
+          </h3>
+        </Link>
 
         <div className="flex items-center justify-between">
           <span className="font-syne font-bold text-base text-ghost">
@@ -127,7 +132,6 @@ export default function ProductCard({ product, className }) {
           </div>
         )}
 
-        {/* Rating dots */}
         <div className="flex items-center gap-0.5 mt-2.5">
           {Array.from({ length: 5 }).map((_, i) => (
             <span

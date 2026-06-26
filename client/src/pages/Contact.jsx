@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { cn } from '@/lib/utils'
+import api from '@/lib/axios'
 
 const CONTACT_CARDS = [
   {
@@ -134,6 +135,8 @@ export default function Contact() {
 
   const [openFaq, setOpenFaq] = useState(0)
   const [sent, setSent]       = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError]     = useState('')
   const [form, setForm]       = useState({
     name: '', email: '', phone: '', subject: '', message: '',
   })
@@ -150,10 +153,20 @@ export default function Contact() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSent(true)
-    setForm({ name: '', email: '', phone: '', subject: '', message: '' })
+    setError('')
+
+    try {
+      setSending(true)
+      await api.post('/contact', form)
+      setSent(true)
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' })
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to send message. Please try again.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -311,11 +324,18 @@ export default function Contact() {
                   />
                 </div>
 
+                {error && (
+                  <p className="rounded-lg border border-red-400/20 bg-red-400/10 px-4 py-3 font-dm text-sm text-red-300">
+                    {error}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-ember hover:bg-ember-dark text-void font-dm font-semibold text-sm py-3.5 rounded-lg transition-all duration-200 hover:scale-[1.01]"
+                  disabled={sending}
+                  className="w-full flex items-center justify-center gap-2 bg-ember hover:bg-ember-dark disabled:opacity-50 text-void font-dm font-semibold text-sm py-3.5 rounded-lg transition-all duration-200 hover:scale-[1.01]"
                 >
-                  Send Message
+                  {sending ? 'Sending...' : 'Send Message'}
                   <Send size={16} strokeWidth={2.5} />
                 </button>
               </form>
@@ -373,3 +393,5 @@ export default function Contact() {
     </div>
   )
 }
+
+

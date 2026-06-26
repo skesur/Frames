@@ -1,5 +1,4 @@
 import { Link }                                  from 'react-router-dom'
-import { Users, Camera, X, Video } from 'lucide-react'
 
 const SHOP_LINKS = [
   { label: 'All Frames',    href: '/shop'                          },
@@ -16,12 +15,7 @@ const COMPANY_LINKS = [
   { label: 'Terms & Policies', href: '/terms'   },
 ]
 
-const SOCIALS = [
-  { Icon: Users,  label: 'Facebook'  },
-  { Icon: Camera, label: 'Instagram' },
-  { Icon: X,      label: 'Twitter'   },
-  { Icon: Video,  label: 'YouTube'   },
-]
+const SOCIALS = ['X', 'LinkedIn', 'Instagram', 'YouTube']
 
 export default function Footer() {
   return (
@@ -42,17 +36,15 @@ export default function Footer() {
               See the world differently with frames that match your style and personality.
             </p>
             {/* Social icons */}
-            <div className="flex items-center gap-4">
-              {SOCIALS.map(({ Icon, label }) => (
-                <a
+            <div className="flex items-center gap-4 flex-wrap">
+              {SOCIALS.map((label) => (
+                <span
                   key={label}
-                  href="#"
                   aria-label={label}
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                  style={{ background: 'var(--ember)' }}
+                  className="rounded-full border border-ember/35 px-3.5 py-2 font-dm text-xs font-medium text-ember/90 select-none"
                 >
-                  <Icon size={15} strokeWidth={2} style={{ color: 'var(--void)' }} />
-                </a>
+                  {label}
+                </span>
               ))}
             </div>
           </div>
@@ -110,3 +102,4 @@ export default function Footer() {
     </footer>
   )
 }
+

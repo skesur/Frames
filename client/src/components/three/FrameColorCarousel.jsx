@@ -1,5 +1,5 @@
 import { Suspense, useRef, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, Float, Html, useGLTF } from '@react-three/drei'
 import gsap from 'gsap'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -59,7 +59,17 @@ function FrameModel({ modelPath, groupRef }) {
   )
 }
 
-function Scene({ activeIndex, modelRef }) {
+function Scene({ activeIndex, modelRef, isAnimating }) {
+  useFrame(({ mouse }) => {
+    const model = modelRef.current
+    if (!model || isAnimating) return
+
+    const targetY = mouse.x * 0.18
+    const targetX = -mouse.y * 0.08
+    model.rotation.y += (targetY - model.rotation.y) * 0.08
+    model.rotation.x += (targetX - model.rotation.x) * 0.08
+  })
+
   return (
     <>
       <ambientLight intensity={1.5} />
@@ -192,7 +202,7 @@ export default function FrameColorCarousel() {
             </Html>
           }
         >
-          <Scene activeIndex={activeIndex} modelRef={modelRef} />
+          <Scene activeIndex={activeIndex} modelRef={modelRef} isAnimating={isAnimating} />
         </Suspense>
       </Canvas>
 
@@ -242,3 +252,4 @@ export default function FrameColorCarousel() {
 COLORS.forEach((color) => {
   useGLTF.preload(color.model)
 })
+

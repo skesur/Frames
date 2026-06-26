@@ -8,6 +8,7 @@ import authRoutes    from './routes/auth.js'
 import productRoutes from './routes/products.js'
 import orderRoutes   from './routes/orders.js'
 import cartRoutes    from './routes/cart.js'
+import contactRoutes from './routes/contact.js'
 import adminRoutes from './routes/admin.js'
 import { AppError, errorHandler } from './middleware/errorHandler.js'
 
@@ -75,9 +76,11 @@ app.use('/api/auth',     requireDatabase, authRoutes)
 app.use('/api/products', requireDatabase, productRoutes)
 app.use('/api/orders',   requireDatabase, orderRoutes)
 app.use('/api/cart',     requireDatabase, cartRoutes)
+app.use('/api/contact',  requireDatabase, contactRoutes)
 app.use('/api/admin', requireDatabase, adminRoutes)
 
 // Global error handler — must be last
 app.use(errorHandler)
 
 export default app
+

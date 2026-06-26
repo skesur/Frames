@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout   from '@/components/layout/Layout'
 import Home     from '@/pages/Home'
 import Shop     from '@/pages/Shop'
+import Product  from '@/pages/Product'
 import Cart     from '@/pages/Cart'
 import Login    from '@/pages/Login'
 import Profile  from '@/pages/Profile'
@@ -17,6 +18,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/"        element={<Home />}    />
           <Route path="/shop"    element={<Shop />}    />
+          <Route path="/product/:identifier" element={<Product />} />
           <Route path="/cart"    element={<Cart />}    />
           <Route path="/profile" element={<Profile />} />
           <Route path="/about"   element={<About />}   />

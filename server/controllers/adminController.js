@@ -2,6 +2,7 @@ import mongoose   from 'mongoose'
 import User        from '../models/User.js'
 import Product      from '../models/Product.js'
 import Order         from '../models/Order.js'
+import ContactMessage from '../models/ContactMessage.js'
 import { AppError }   from '../middleware/errorHandler.js'
 
 const PRODUCT_CATEGORIES = ['top-sellers', 'new-arrivals', 'round-frames', 'square-frames', 'sunglasses']
@@ -304,6 +305,46 @@ export const updateAdminUserRole = async (req, res, next) => {
     delete safeUser.password
 
     res.json({ success: true, user: safeUser })
+  } catch (err) {
+    next(err)
+  }
+}
+export const getAdminMessages = async (req, res, next) => {
+  try {
+    const { search, status } = req.query
+    const filter = {}
+
+    if (status && status !== 'all') filter.status = status
+
+    if (search) {
+      filter.$or = [
+        { name:    { $regex: search, $options: 'i' } },
+        { email:   { $regex: search, $options: 'i' } },
+        { phone:   { $regex: search, $options: 'i' } },
+        { subject: { $regex: search, $options: 'i' } },
+        { message: { $regex: search, $options: 'i' } },
+      ]
+    }
+
+    const messages = await ContactMessage.find(filter).sort({ createdAt: -1 })
+    res.json({ success: true, count: messages.length, messages })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const updateAdminMessageStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const { status } = req.body
+
+    if (!isValidId(id)) return next(new AppError('Invalid message ID', 400))
+    if (!['new', 'read'].includes(status)) return next(new AppError('Status must be either "new" or "read"', 400))
+
+    const message = await ContactMessage.findByIdAndUpdate(id, { status }, { new: true })
+    if (!message) return next(new AppError('Message not found', 404))
+
+    res.json({ success: true, message })
   } catch (err) {
     next(err)
   }

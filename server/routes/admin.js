@@ -6,6 +6,7 @@ import {
   getAdminProducts, createAdminProduct, updateAdminProduct, deleteAdminProduct,
   getAdminOrders, updateAdminOrderStatus,
   getAdminUsers, updateAdminUserRole,
+  getAdminMessages, updateAdminMessageStatus,
 } from '../controllers/adminController.js'
 
 const router = Router()
@@ -24,5 +25,8 @@ router.put('/orders/:id/status', updateAdminOrderStatus)
 
 router.get('/users',          getAdminUsers)
 router.put('/users/:id/role', updateAdminUserRole)
+
+router.get('/messages', getAdminMessages)
+router.put('/messages/:id/status', updateAdminMessageStatus)
 
 export default router
