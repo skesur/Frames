@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema(
     address:  { type: String, default: '' },
     pincode:  { type: String, default: '' },
     country:  { type: String, default: '' },
-    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
   },
   { timestamps: true }
 )
