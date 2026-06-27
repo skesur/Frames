@@ -4,6 +4,8 @@ import { Suspense, useRef, useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { useUIStore } from '@/store/uiStore'
+import { cn } from '@/lib/utils'
+
 
 // Helper function to map scroll values
 const interpolate = (val, start, end, outStart, outEnd) => {
