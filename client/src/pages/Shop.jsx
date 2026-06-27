@@ -71,7 +71,7 @@ function ProductRow({ title, subtitle, products, loading }) {
 
         <div
           ref={scrollRef}
-          className="flex gap-3 md:gap-4 overflow-x-auto pb-2 px-6 md:px-12"
+          className="flex gap-3 md:gap-4 overflow-x-auto pb-2 px-6 md:px-12 desktop-padded-scroll"
           style={{ scrollbarWidth: 'none' }}
         >
           {loading
