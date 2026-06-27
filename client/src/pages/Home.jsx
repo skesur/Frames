@@ -378,7 +378,7 @@ export function HomeContent() {
       >
 
         {/* 3D Canvas */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none">
+        <div className={cn("absolute inset-0 w-full h-full", isMobile ? "pointer-events-none" : "pointer-events-auto")}>
           <Canvas camera={{ position: [0, 0, 5.0], fov: 38 }} style={{ pointerEvents: isMobile ? 'none' : 'auto' }}>
             <ambientLight intensity={1.5} />
             <directionalLight position={[3, 4, 5]} intensity={2.2} />
