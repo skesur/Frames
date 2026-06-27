@@ -60,9 +60,9 @@ function HomeController3D({ scrollProgress, introAnimationDone, onModelSettled }
 
     // Hero landing position: top-center on mobile, left-center on desktop
     const heroX = isMobile ? 0.0 : -1.1
-    const heroY = isMobile ? 0.22 : -0.1
+    const heroY = isMobile ? 0.28 : -0.1
     const heroZ = 0.8
-    const heroScale = isMobile ? 0.45 : 1.35
+    const heroScale = isMobile ? 0.52 : 1.35
 
     model.position.set(startX, startY, startZ)
     model.rotation.set(0.6, -Math.PI / 1.5, 0.4)
@@ -98,7 +98,7 @@ function HomeController3D({ scrollProgress, introAnimationDone, onModelSettled }
 
     // Layout node positions
     const heroX   = isMobile ? 0.0   : -1.1    // Step 1: Black hero
-    const heroY   = isMobile ? 0.22  : -0.1
+    const heroY   = isMobile ? 0.28  : -0.1
     const blX     = isMobile ? -0.6  : -1.2    // Step 2+: Black bottom-left
     const blY     = isMobile ? -0.4  : -0.5
     const brX     = isMobile ? 0.6   :  1.2    // Step 3: Green bottom-right
@@ -106,7 +106,7 @@ function HomeController3D({ scrollProgress, introAnimationDone, onModelSettled }
     const tcX     = 0.0                         // Step 4: White top-center
     const tcY     = isMobile ? 0.5   :  0.55
 
-    const landingScale = isMobile ? 0.45 : 1.35
+    const landingScale = isMobile ? 0.52 : 1.35
     const trilogyScale = isMobile ? 0.22 : 0.55
 
     const orbitActive = p > 0.76 && p < 0.84
@@ -379,13 +379,13 @@ export function HomeContent() {
 
         {/* 3D Canvas */}
         <div className="absolute inset-0 w-full h-full pointer-events-none">
-          <Canvas camera={{ position: [0, 0, 5.0], fov: 38 }} style={{ pointerEvents: isOrbitEnabled ? 'auto' : 'none' }}>
+          <Canvas camera={{ position: [0, 0, 5.0], fov: 38 }} style={{ pointerEvents: (isOrbitEnabled && !isMobile) ? 'auto' : 'none' }}>
             <ambientLight intensity={1.5} />
             <directionalLight position={[3, 4, 5]} intensity={2.2} />
             <directionalLight position={[-4, 2, -3]} intensity={0.9} />
 
             <OrbitControls
-              enabled={isOrbitEnabled}
+              enabled={isOrbitEnabled && !isMobile}
               enableZoom={false}
               enablePan={false}
               maxPolarAngle={Math.PI / 1.5}
@@ -410,7 +410,7 @@ export function HomeContent() {
         {/* Step 1: Hero text — aligned to bottom on mobile, right side on desktop */}
         <div
           style={getHeroStyles()}
-          className="absolute inset-0 flex flex-col md:flex-row items-center justify-end md:justify-end pb-8 md:pb-0 px-6 md:px-16 pointer-events-none transition-all duration-100 ease-out z-20"
+          className="absolute inset-0 flex flex-col md:flex-row items-center justify-end md:justify-end pb-20 md:pb-0 px-6 md:px-16 pointer-events-none transition-all duration-100 ease-out z-20"
         >
           <div className="w-full md:w-[45%] flex flex-col justify-center items-center md:items-start text-center md:text-left py-2 md:py-0 px-4 md:px-0 pointer-events-auto mt-12 md:mt-0">
             <span className="hero-text-item opacity-0 font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-violet mb-2 md:mb-3">
