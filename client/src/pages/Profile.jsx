@@ -558,22 +558,22 @@ export default function Profile() {
                   <button
                     key={order._id}
                     onClick={() => setActiveOrder(order)}
-                    className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5 text-left transition-all duration-200 hover:border-violet/25 hover:bg-white/[0.04] hover:-translate-y-0.5"
+                    className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 sm:p-5 text-left transition-all duration-200 hover:border-violet/25 hover:bg-white/[0.04] hover:-translate-y-0.5"
                   >
                     {/* Order ID + date */}
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-between mb-3.5">
                       <div>
-                        <p className="font-mono text-[10px] text-ghost-muted uppercase tracking-widest mb-1">
+                        <p className="font-mono text-[9px] sm:text-[10px] text-ghost-muted uppercase tracking-widest mb-0.5 sm:mb-1">
                           {order.orderId}
                         </p>
-                        <p className="font-dm text-xs text-ghost-muted">
+                        <p className="font-dm text-[11px] sm:text-xs text-ghost-muted">
                           {new Date(order.createdAt).toLocaleDateString('en-IN', {
                             day: 'numeric', month: 'short', year: 'numeric',
                           })}
                         </p>
                       </div>
                       <span className={cn(
-                        'font-mono text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full border capitalize',
+                        'font-mono text-[8px] sm:text-[9px] uppercase tracking-widest px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border shrink-0',
                         st.color, st.bg, st.border
                       )}>
                         {order.orderStatus}
@@ -581,7 +581,7 @@ export default function Profile() {
                     </div>
 
                     {/* Items preview */}
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 mb-3.5">
                       {order.items?.slice(0, 3).map((item, i) => (
                         <div key={i} className="w-10 h-10 rounded-lg bg-[#111] flex items-center justify-center">
                           <img
@@ -599,8 +599,8 @@ export default function Profile() {
                     </div>
 
                     {/* Total + item count */}
-                    <div className="flex items-center justify-between">
-                      <span className="font-syne font-bold text-base text-ember">
+                    <div className="flex items-center justify-between border-t border-white/[0.04] pt-3 mt-1">
+                      <span className="font-syne font-bold text-sm sm:text-base text-ember">
                         {formatPrice(order.pricing?.total || 0)}
                       </span>
                       <span className="font-mono text-[10px] text-ghost-muted">

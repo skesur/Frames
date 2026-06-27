@@ -15,7 +15,7 @@ const COMPANY_LINKS = [
   { label: 'Terms & Policies', href: '/terms'   },
 ]
 
-const SOCIALS = ['X', 'LinkedIn', 'Instagram', 'YouTube']
+const SOCIALS = ['X', 'LinkedIn', 'Instagram', 'YouTube', 'Github']
 
 export default function Footer() {
   return (

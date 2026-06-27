@@ -44,11 +44,13 @@ const COLORS = [
 
 function FrameModel({ modelPath, groupRef }) {
   const { scene } = useGLTF(modelPath)
+  const isMobile = window.innerWidth < 768
+  const currentModelScale = isMobile ? 1.15 : MODEL_SCALE
 
   return (
     <group
       ref={groupRef}
-      scale={MODEL_SCALE}
+      scale={currentModelScale}
       position={MODEL_POSITION}
       rotation={[0, 0, 0]}
     >
@@ -95,10 +97,14 @@ export default function FrameColorCarousel() {
 
   const active = COLORS[activeIndex]
 
+  const isMobile = window.innerWidth < 768
+  const currentModelScale = isMobile ? 1.15 : MODEL_SCALE
+  const currentModelShrinkScale = isMobile ? 0.85 : MODEL_SHRINK_SCALE
+
   function resetModelPose(model) {
     model.position.set(...MODEL_POSITION)
     model.rotation.set(0, 0, 0)
-    model.scale.set(MODEL_SCALE, MODEL_SCALE, MODEL_SCALE)
+    model.scale.set(currentModelScale, currentModelScale, currentModelScale)
   }
 
   function go(direction, targetIndex) {
@@ -138,16 +144,16 @@ export default function FrameColorCarousel() {
         duration: 0.34,
       }, '<')
       .to(model.scale, {
-        x: MODEL_SHRINK_SCALE,
-        y: MODEL_SHRINK_SCALE,
-        z: MODEL_SHRINK_SCALE,
+        x: currentModelShrinkScale,
+        y: currentModelShrinkScale,
+        z: currentModelShrinkScale,
         duration: 0.24,
       }, '<')
       .call(() => {
         setActiveIndex(nextIndex)
         model.position.set(-jumpX, 0.45, -0.25)
         model.rotation.set(0, direction * -Math.PI * 1.1, direction * 0.2)
-        model.scale.set(MODEL_SHRINK_SCALE, MODEL_SHRINK_SCALE, MODEL_SHRINK_SCALE)
+        model.scale.set(currentModelShrinkScale, currentModelShrinkScale, currentModelShrinkScale)
       })
       .to(model.position, {
         x: MODEL_POSITION[0],
@@ -164,9 +170,9 @@ export default function FrameColorCarousel() {
         ease: 'back.out(1.5)',
       }, '<')
       .to(model.scale, {
-        x: MODEL_SCALE,
-        y: MODEL_SCALE,
-        z: MODEL_SCALE,
+        x: currentModelScale,
+        y: currentModelScale,
+        z: currentModelScale,
         duration: 0.42,
         ease: 'back.out(1.7)',
       }, '<')
@@ -210,20 +216,20 @@ export default function FrameColorCarousel() {
         type="button"
         onClick={() => go(-1)}
         disabled={isAnimating}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full glass flex items-center justify-center text-ghost/70 hover:text-ghost disabled:opacity-40 transition-colors"
+        className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 rounded-full glass flex items-center justify-center text-ghost/70 hover:text-ghost disabled:opacity-40 transition-colors"
         aria-label="Previous frame color"
       >
-        <ChevronLeft size={22} />
+        <ChevronLeft size={18} className="md:w-[22px] md:h-[22px]" />
       </button>
 
       <button
         type="button"
         onClick={() => go(1)}
         disabled={isAnimating}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full glass flex items-center justify-center text-ghost/70 hover:text-ghost disabled:opacity-40 transition-colors"
+        className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-11 md:h-11 rounded-full glass flex items-center justify-center text-ghost/70 hover:text-ghost disabled:opacity-40 transition-colors"
         aria-label="Next frame color"
       >
-        <ChevronRight size={22} />
+        <ChevronRight size={18} className="md:w-[22px] md:h-[22px]" />
       </button>
 
       <div className="absolute left-1/2 bottom-7 z-20 -translate-x-1/2 text-center">

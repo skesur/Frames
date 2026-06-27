@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   FileText, ShieldCheck, Truck, RotateCcw,
-  Award, ArrowRight, CheckCircle,
+  Award, ArrowRight, CheckCircle, ChevronRight,
 } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { cn } from '@/lib/utils'
@@ -184,7 +184,7 @@ export default function Terms() {
 
   return (
     <div className="bg-void min-h-screen">
-      <section className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden">
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-20 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -193,12 +193,11 @@ export default function Terms() {
           }}
         />
         <div ref={heroRef} className="frame-container relative text-center">
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-5 block">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-3 md:mb-5 block">
             Legal Information & Guidelines
           </span>
           <h1
-            className="font-syne font-extrabold text-ghost mb-5"
-            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', letterSpacing: '-0.03em' }}
+            className="font-syne font-extrabold text-ghost mb-3 md:mb-5 text-3xl md:text-5xl lg:text-6xl tracking-tight leading-tight"
           >
             Terms & <span className="text-gradient">Policies</span>
           </h1>
@@ -209,29 +208,32 @@ export default function Terms() {
         </div>
       </section>
 
-      <section className="pb-16 md:pb-20">
+      <section className="pb-10 md:pb-20">
         <div
           ref={indexRef}
-          className="frame-container grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
+          className="frame-container max-w-xl mx-auto sm:max-w-none rounded-2xl border border-white/[0.08] bg-white/[0.02] p-1 sm:p-0 sm:border-0 sm:bg-transparent sm:grid sm:grid-cols-5 sm:gap-4 flex flex-col divide-y divide-white/[0.06] sm:divide-y-0"
         >
           {SECTIONS_INDEX.map(({ Icon, label, anchor }) => (
             <a
               key={anchor}
               href={`#${anchor}`}
-              className="index-card group rounded-xl border border-white/[0.07] bg-white/[0.02] p-5 text-center transition-all duration-300 hover:border-ember/25 hover:bg-white/[0.035] no-underline"
+              className="index-card group p-4 sm:p-5 flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3.5 sm:gap-3 transition-all duration-300 hover:bg-white/[0.03] sm:hover:bg-white/[0.035] sm:rounded-xl sm:border sm:border-white/[0.07] sm:bg-white/[0.02] sm:hover:border-ember/25 no-underline"
             >
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-3 bg-ember/10 border border-ember/20 group-hover:bg-ember/15 transition-colors duration-300">
-                <Icon size={18} strokeWidth={1.75} className="text-ember" />
+              <div className="flex items-center gap-3.5 sm:flex-col sm:gap-3 sm:mx-auto">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center shrink-0 sm:mx-auto sm:mb-1 bg-ember/10 border border-ember/20 group-hover:bg-ember/15 transition-colors duration-300">
+                  <Icon size={16} strokeWidth={1.75} className="text-ember" />
+                </div>
+                <p className="font-dm text-xs text-ghost/75 group-hover:text-ghost/95 transition-colors duration-200">
+                  {label}
+                </p>
               </div>
-              <p className="font-dm text-xs text-ghost/60 leading-snug group-hover:text-ghost/80 transition-colors duration-200">
-                {label}
-              </p>
+              <ChevronRight size={14} className="text-ghost/30 sm:hidden shrink-0" />
             </a>
           ))}
         </div>
       </section>
 
-      <section id="terms" className="pb-20 md:pb-28">
+      <section id="terms" className="pb-12 md:pb-28">
         <div ref={termsRef} className="frame-container max-w-3xl">
           <SectionHeader Icon={FileText} title="Terms of Service" />
           <SectionRule />
@@ -310,7 +312,7 @@ export default function Terms() {
         </div>
       </section>
 
-      <section id="privacy" className="pb-20 md:pb-28 relative">
+      <section id="privacy" className="pb-12 md:pb-28 relative">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-px pointer-events-none"
           style={{
@@ -404,7 +406,7 @@ export default function Terms() {
         </div>
       </section>
 
-      <section id="shipping" className="pb-20 md:pb-28">
+      <section id="shipping" className="pb-12 md:pb-28">
         <div ref={shippingRef} className="frame-container max-w-3xl">
           <SectionHeader Icon={Truck} title="Shipping Policy" />
           <SectionRule />
@@ -457,7 +459,7 @@ export default function Terms() {
         </div>
       </section>
 
-      <section id="returns" className="pb-20 md:pb-28 relative">
+      <section id="returns" className="pb-12 md:pb-28 relative">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-px pointer-events-none"
           style={{
@@ -557,7 +559,7 @@ export default function Terms() {
         </div>
       </section>
 
-      <section id="warranty" className="pb-20 md:pb-28">
+      <section id="warranty" className="pb-12 md:pb-28">
         <div ref={warrantyRef} className="frame-container max-w-3xl">
           <SectionHeader Icon={Award} title="Warranty Information" />
           <SectionRule />
@@ -640,7 +642,7 @@ export default function Terms() {
         </div>
       </section>
 
-      <section className="pb-24 md:pb-32">
+      <section className="pb-16 md:pb-32">
         <div ref={ctaRef} className="frame-container">
           <div
             className="relative rounded-2xl border border-white/[0.08] overflow-hidden px-8 py-14 md:py-16 text-center"

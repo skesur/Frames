@@ -34,7 +34,7 @@ function SectionHeader({ Icon, title, className }) {
   return (
     <div className={cn('flex items-center gap-3 mb-4', className)}>
       <Icon size={22} strokeWidth={1.75} className="text-ember shrink-0" />
-      <h2 className="font-syne font-bold text-2xl md:text-3xl text-gradient leading-tight">
+      <h2 className="font-syne font-bold text-xl md:text-3xl text-gradient leading-tight">
         {title}
       </h2>
     </div>
@@ -44,7 +44,7 @@ function SectionHeader({ Icon, title, className }) {
 function SectionRule() {
   return (
     <div
-      className="h-px w-full mb-10 md:mb-12"
+      className="h-px w-full mb-6 md:mb-12"
       style={{ background: 'linear-gradient(to right, rgba(255,107,53,0.55), rgba(255,107,53,0.08), transparent)' }}
     />
   )
@@ -97,18 +97,18 @@ export default function About() {
     <div className="bg-void min-h-screen">
 
       {/* ── Page hero ── */}
-      <section className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden">
+      <section className="relative pt-24 md:pt-32 pb-8 md:pb-20 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(155,92,246,0.12) 0%, transparent 55%)' }}
         />
         <div ref={heroRef} className="frame-container relative text-center">
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-5 block">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-3 md:mb-5 block">
             Who We Are
           </span>
           <h1
-            className="font-syne font-extrabold text-ghost mb-5"
-            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', letterSpacing: '-0.03em' }}
+            className="font-syne font-extrabold text-ghost mb-3 md:mb-5"
+            style={{ fontSize: 'clamp(2.2rem, 5vw, 3.75rem)', letterSpacing: '-0.03em' }}
           >
             About <span className="text-gradient">Us</span>
           </h1>
@@ -120,7 +120,7 @@ export default function About() {
       </section>
 
       {/* ── Our Story ── */}
-      <section className="pb-20 md:pb-28">
+      <section className="pb-12 md:pb-28">
         <div ref={storyRef} className="frame-container max-w-3xl">
           <SectionHeader Icon={BookOpen} title="Our Story" />
           <SectionRule />
@@ -141,7 +141,7 @@ export default function About() {
       </section>
 
       {/* ── Vision & Mission ── */}
-      <section className="pb-20 md:pb-28">
+      <section className="pb-12 md:pb-28">
         <div ref={visionRef} className="frame-container grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <GlassCard className="about-card text-center">
             <GradientIcon Icon={Eye} />
@@ -164,7 +164,7 @@ export default function About() {
       </section>
 
       {/* ── Our Values ── */}
-      <section className="pb-20 md:pb-28 relative">
+      <section className="pb-12 md:pb-28 relative">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-px pointer-events-none"
           style={{ background: 'linear-gradient(to right, transparent, rgba(155,92,246,0.25), transparent)' }}
@@ -193,7 +193,7 @@ export default function About() {
       </section>
 
       {/* ── Our Team ── */}
-      <section className="pb-20 md:pb-28">
+      <section className="pb-12 md:pb-28">
         <div ref={teamRef} className="frame-container max-w-3xl">
           <SectionHeader Icon={Users} title="Our Team" />
           <SectionRule />
@@ -207,7 +207,7 @@ export default function About() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="pb-24 md:pb-32">
+      <section className="pb-16 md:pb-32">
         <div ref={ctaRef} className="frame-container">
           <div
             className="relative rounded-2xl border border-white/[0.08] overflow-hidden px-8 py-14 md:py-16 text-center"

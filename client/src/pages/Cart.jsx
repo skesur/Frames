@@ -396,61 +396,59 @@ function CartItem({ item }) {
   const { removeItem, updateQuantity } = useCartStore()
 
   return (
-    <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 md:p-5 flex gap-4 transition-all duration-200 hover:border-white/[0.12]">
+    <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3.5 sm:p-5 flex gap-3 sm:gap-4 transition-all duration-200 hover:border-white/[0.12] relative">
 
       {/* Image */}
-      <div className="w-20 h-20 md:w-24 md:h-24 rounded-lg bg-[#0d0d0d] flex items-center justify-center flex-shrink-0">
+      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-transparent flex items-center justify-center flex-shrink-0">
         <img
           src={item.images?.[0] || '/assets/images/placeholder.png'}
           alt={item.name}
-          className="w-16 h-16 object-contain"
-          style={{ filter: 'drop-shadow(0 4px 12px rgba(155,92,246,0.2))' }}
+          className="w-14 h-14 sm:w-16 sm:h-16 object-contain"
+          style={{ filter: 'drop-shadow(0 4px 12px rgba(155,92,246,0.15))' }}
         />
       </div>
 
       {/* Info */}
-      <div className="flex-1 min-w-0">
-        <p className="font-mono text-[9px] text-ghost-muted uppercase tracking-widest mb-1">
+      <div className="flex-1 min-w-0 pr-6">
+        <p className="font-mono text-[9px] text-ghost-muted uppercase tracking-widest mb-0.5">
           {item.category?.replace(/-/g, ' ')}
         </p>
-        <h3 className="font-syne font-semibold text-sm md:text-base text-ghost leading-snug mb-3 line-clamp-2">
+        <h3 className="font-syne font-semibold text-sm text-ghost leading-tight mb-1 pr-2 line-clamp-2">
           {item.name}
         </h3>
+        
+        <p className="font-syne font-bold text-sm sm:text-base text-ember mb-2.5">
+          {formatPrice(item.price * item.quantity)}
+        </p>
 
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          {/* Quantity */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => updateQuantity(item._id, item.quantity - 1)}
-              className="w-7 h-7 rounded-full border border-white/[0.1] flex items-center justify-center text-ghost-muted hover:text-ghost hover:border-white/30 transition-all"
-            >
-              <Minus size={12} />
-            </button>
-            <span className="font-mono text-sm text-ghost w-5 text-center">
-              {item.quantity}
-            </span>
-            <button
-              onClick={() => updateQuantity(item._id, item.quantity + 1)}
-              className="w-7 h-7 rounded-full border border-white/[0.1] flex items-center justify-center text-ghost-muted hover:text-ghost hover:border-white/30 transition-all"
-            >
-              <Plus size={12} />
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <span className="font-syne font-bold text-base text-ghost">
-              {formatPrice(item.price * item.quantity)}
-            </span>
-            <button
-              onClick={() => removeItem(item._id)}
-              className="text-ghost-muted hover:text-red-400 transition-colors p-1"
-              aria-label="Remove item"
-            >
-              <Trash2 size={15} strokeWidth={1.75} />
-            </button>
-          </div>
+        {/* Quantity Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <button
+            onClick={() => updateQuantity(item._id, item.quantity - 1)}
+            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-white/[0.1] flex items-center justify-center text-ghost-muted hover:text-ghost hover:border-white/30 transition-all"
+          >
+            <Minus size={10} className="sm:w-3 sm:h-3" />
+          </button>
+          <span className="font-mono text-xs sm:text-sm text-ghost w-4 sm:w-5 text-center">
+            {item.quantity}
+          </span>
+          <button
+            onClick={() => updateQuantity(item._id, item.quantity + 1)}
+            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-white/[0.1] flex items-center justify-center text-ghost-muted hover:text-ghost hover:border-white/30 transition-all"
+          >
+            <Plus size={10} className="sm:w-3 sm:h-3" />
+          </button>
         </div>
       </div>
+
+      {/* Absolute delete button */}
+      <button
+        onClick={() => removeItem(item._id)}
+        className="absolute top-3 right-3 text-ghost-muted hover:text-red-400 transition-colors p-1"
+        aria-label="Remove item"
+      >
+        <Trash2 size={14} className="sm:w-[15px] sm:h-[15px]" strokeWidth={1.75} />
+      </button>
     </div>
   )
 }
@@ -537,10 +535,10 @@ export default function Cart() {
     <div className="bg-void min-h-screen">
 
       {/* Header */}
-      <section className="pt-32 pb-8">
+      <section className="pt-24 pb-4 md:pt-32 md:pb-8">
         <div className="frame-container flex items-center justify-between">
           <div>
-            <h1 className="font-syne font-extrabold text-2xl md:text-3xl text-ghost mb-1">
+            <h1 className="font-syne font-extrabold text-xl sm:text-3xl text-ghost mb-1">
               Your Cart
             </h1>
             <p className="font-mono text-[11px] text-ghost-muted uppercase tracking-widest">
@@ -549,7 +547,7 @@ export default function Cart() {
           </div>
           <button
             onClick={clearCart}
-            className="font-dm text-xs text-ghost-muted hover:text-red-400 flex items-center gap-1.5 transition-colors border border-white/[0.08] hover:border-red-400/30 px-3 py-2 rounded-full"
+            className="font-dm text-xs text-ghost-muted hover:text-red-400 flex items-center gap-1.5 transition-colors border border-white/[0.08] hover:border-red-400/30 px-3 py-2 rounded-full shrink-0 whitespace-nowrap"
           >
             <Trash2 size={12} />
             Clear All
@@ -591,15 +589,14 @@ export default function Cart() {
                 <div
                   className="flex justify-between items-center py-4 mb-6 border-t border-b border-white/[0.06]"
                 >
-                  <span className="font-syne font-bold text-ghost">Estimated Total</span>
-                  <span className="font-syne font-bold text-xl text-ember">{formatPrice(total)}</span>
+                  <span className="font-syne font-bold text-ghost text-sm sm:text-base leading-tight max-w-[60%]">Estimated Total</span>
+                  <span className="font-syne font-bold text-lg sm:text-xl text-ember shrink-0">{formatPrice(total)}</span>
                 </div>
 
                 <button
                   onClick={() => setShowModal(true)}
                   className="w-full flex items-center justify-center gap-2 bg-ember hover:bg-ember-dark text-void font-dm font-semibold py-4 rounded-xl transition-all duration-200 hover:shadow-[0_0_24px_rgba(255,107,53,0.3)]"
                 >
-                  <ClipboardCheck size={16} strokeWidth={2.5} />
                   Proceed to Checkout
                 </button>
 

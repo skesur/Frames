@@ -67,24 +67,12 @@ function ProductRow({ title, subtitle, products, loading }) {
 
       {/* Scroll container */}
       <div className="relative">
-        {/* Mobile scroll buttons */}
-        <button
-          onClick={() => scroll(-1)}
-          className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full glass flex items-center justify-center text-ghost/60"
-        >
-          <ChevronLeft size={14} />
-        </button>
-        <button
-          onClick={() => scroll(1)}
-          className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full glass flex items-center justify-center text-ghost/60"
-        >
-          <ChevronRight size={14} />
-        </button>
+
 
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto pb-2"
-          style={{ scrollbarWidth: 'none', paddingLeft: '2rem', paddingRight: '2rem' }}
+          className="flex gap-3 md:gap-4 overflow-x-auto pb-2 px-6 md:px-12"
+          style={{ scrollbarWidth: 'none' }}
         >
           {loading
             ? Array.from({ length: 5 }).map((_, i) => (

@@ -50,14 +50,14 @@ export default function ProductCard({ product, className }) {
   return (
     <div
       className={cn(
-        'group relative flex-shrink-0 w-56 md:w-64 rounded-xl overflow-hidden border border-white/[0.07] bg-white/[0.02] transition-all duration-300 hover:border-violet/25 hover:bg-white/[0.04] hover:-translate-y-1',
+        'group relative flex-shrink-0 w-[185px] md:w-64 rounded-xl overflow-hidden border border-white/[0.07] bg-white/[0.02] transition-all duration-300 hover:border-violet/25 hover:bg-white/[0.04] hover:-translate-y-1',
         className
       )}
     >
       {product.badge && (
         <span
           className={cn(
-            'absolute top-3 left-3 z-10 font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full border',
+            'absolute top-2.5 left-2.5 z-10 font-mono text-[8px] md:text-[9px] uppercase tracking-widest px-1.5 md:px-2 py-0.5 rounded-full border',
             badgeStyle
           )}
         >
@@ -66,11 +66,11 @@ export default function ProductCard({ product, className }) {
       )}
 
       <Link to={productPath} aria-label={`View ${product.name}`}>
-        <div className="relative bg-[#0d0d0d] h-44 flex items-center justify-center overflow-hidden">
+        <div className="relative bg-[#0d0d0d] h-32 md:h-44 flex items-center justify-center overflow-hidden">
           <img
             src={product.images?.[0] || '/assets/image/hero_1.png'}
             alt={product.name}
-            className="h-36 w-auto rounded-xl object-contain transition-transform duration-500 group-hover:scale-110"
+            className="h-24 md:h-36 w-auto rounded-xl object-contain transition-transform duration-500 group-hover:scale-110"
             style={{ filter: 'drop-shadow(0 8px 20px rgba(155,92,246,0.15))' }}
           />
           <div
@@ -80,7 +80,7 @@ export default function ProductCard({ product, className }) {
         </div>
       </Link>
 
-      <div className="p-4">
+      <div className="p-3 md:p-4">
         <Link to={productPath} aria-label={`View ${product.name}`}>
           <p className="font-mono text-[9px] text-ghost-muted uppercase tracking-widest mb-1.5">
             {product.category.replace(/-/g, ' ')}
@@ -132,7 +132,7 @@ export default function ProductCard({ product, className }) {
           </div>
         )}
 
-        <div className="flex items-center gap-0.5 mt-2.5">
+        <div className="flex items-center gap-0.5 mt-2 md:mt-2.5">
           {Array.from({ length: 5 }).map((_, i) => (
             <span
               key={i}

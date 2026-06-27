@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import {
   MapPin, Phone, Mail, MessageSquare, HelpCircle,
   RotateCcw, Truck, Glasses, ShieldCheck, ChevronDown,
-  Send, Users, Camera, X, Video, Linkedin,
+  Send, Linkedin, Instagram, Youtube, Github
 } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { cn } from '@/lib/utils'
@@ -57,19 +57,25 @@ const FAQS = [
   },
 ]
 
+const XIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" {...props}>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+)
+
 const SOCIALS = [
-  { Icon: Users,   label: 'Facebook'  },
-  { Icon: Camera,  label: 'Instagram' },
-  { Icon: X,       label: 'Twitter'   },
-  { Icon: Video,   label: 'YouTube'   },
-  { Icon: Linkedin, label: 'LinkedIn' },
+  { Icon: XIcon,     label: 'X',         href: 'https://x.com' },
+  { Icon: Linkedin,  label: 'LinkedIn',  href: 'https://linkedin.com' },
+  { Icon: Instagram, label: 'Instagram', href: 'https://instagram.com' },
+  { Icon: Youtube,   label: 'YouTube',   href: 'https://youtube.com' },
+  { Icon: Github,    label: 'GitHub',    href: 'https://github.com' },
 ]
 
 function SectionHeader({ Icon, title }) {
   return (
     <div className="flex items-center gap-3 mb-4">
       <Icon size={22} strokeWidth={1.75} className="text-ember shrink-0" />
-      <h2 className="font-syne font-bold text-2xl md:text-3xl text-gradient leading-tight">
+      <h2 className="font-syne font-bold text-xl md:text-3xl text-gradient leading-tight">
         {title}
       </h2>
     </div>
@@ -79,7 +85,7 @@ function SectionHeader({ Icon, title }) {
 function SectionRule() {
   return (
     <div
-      className="h-px w-full mb-10 md:mb-12"
+      className="h-px w-full mb-6 md:mb-12"
       style={{ background: 'linear-gradient(to right, rgba(255,107,53,0.55), rgba(255,107,53,0.08), transparent)' }}
     />
   )
@@ -173,18 +179,17 @@ export default function Contact() {
     <div className="bg-void min-h-screen">
 
       {/* ── Hero ── */}
-      <section className="relative pt-28 md:pt-32 pb-14 md:pb-16 overflow-hidden">
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-20 overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(155,92,246,0.12) 0%, transparent 55%)' }}
         />
         <div ref={heroRef} className="frame-container relative text-center">
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-5 block">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ember/80 mb-3 md:mb-5 block">
             Get In Touch
           </span>
           <h1
-            className="font-syne font-extrabold text-ghost mb-5"
-            style={{ fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', letterSpacing: '-0.03em' }}
+            className="font-syne font-extrabold text-ghost mb-3 md:mb-5 text-3xl md:text-5xl lg:text-6xl tracking-tight leading-tight"
           >
             Contact <span className="text-gradient">Us</span>
           </h1>
@@ -195,7 +200,7 @@ export default function Contact() {
       </section>
 
       {/* ── Info cards ── */}
-      <section className="pb-16 md:pb-20">
+      <section className="pb-10 md:pb-20">
         <div
           ref={cardsRef}
           className="frame-container grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"
@@ -203,15 +208,15 @@ export default function Contact() {
           {CONTACT_CARDS.map(({ Icon, title, lines }) => (
             <div
               key={title}
-              className="contact-card rounded-xl border border-white/[0.07] bg-white/[0.02] p-8 text-center transition-all duration-300 hover:border-violet/25 hover:bg-white/[0.035]"
+              className="contact-card rounded-xl border border-white/[0.07] bg-white/[0.02] p-5 md:p-8 text-center transition-all duration-300 hover:border-violet/25 hover:bg-white/[0.035]"
             >
               <div
-                className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5"
+                className="w-11 h-11 md:w-12 md:h-12 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-5"
                 style={{ background: 'var(--cyber-gradient)' }}
               >
                 <Icon size={20} strokeWidth={1.75} className="text-void" />
               </div>
-              <h3 className="font-syne font-bold text-lg text-ghost mb-4">{title}</h3>
+              <h3 className="font-syne font-bold text-base md:text-lg text-ghost mb-2.5 md:mb-4">{title}</h3>
               <div className="flex flex-col gap-1.5">
                 {lines.map((line) => (
                   <p key={line} className="font-dm text-sm text-ghost/50">{line}</p>
@@ -223,12 +228,12 @@ export default function Contact() {
       </section>
 
       {/* ── Contact form ── */}
-      <section className="pb-16 md:pb-20">
+      <section className="pb-10 md:pb-20">
         <div ref={formRef} className="frame-container">
           <SectionHeader Icon={MessageSquare} title="Send Us a Message" />
           <SectionRule />
 
-          <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-6 md:p-10">
+          <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 sm:p-6 md:p-10">
             {sent ? (
               <div className="text-center py-12">
                 <div className="w-14 h-14 rounded-full bg-violet/15 border border-violet/30 flex items-center justify-center mx-auto mb-5">
@@ -345,7 +350,7 @@ export default function Contact() {
       </section>
 
       {/* ── FAQ ── */}
-      <section className="pb-16 md:pb-20">
+      <section className="pb-10 md:pb-20">
         <div ref={faqRef} className="frame-container max-w-3xl">
           <SectionHeader Icon={HelpCircle} title="Frequently Asked Questions" />
           <SectionRule />
@@ -365,24 +370,26 @@ export default function Contact() {
       </section>
 
       {/* ── Follow us ── */}
-      <section className="pb-24 md:pb-32">
+      <section className="pb-16 md:pb-32">
         <div ref={socialRef} className="frame-container">
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] px-8 py-12 md:py-14 text-center">
+          <div className="rounded-none sm:rounded-2xl border-0 sm:border border-white/[0.08] bg-transparent sm:bg-white/[0.02] px-0 sm:px-8 py-4 sm:py-14 text-center">
             <h2 className="font-syne font-bold text-2xl md:text-3xl text-ghost mb-3">
               Follow <span className="text-gradient">Us</span>
             </h2>
-            <p className="font-dm text-sm text-ghost/50 mb-8 max-w-sm mx-auto leading-relaxed">
+            <p className="font-dm text-sm text-ghost/50 mb-5 md:mb-8 max-w-sm mx-auto leading-relaxed">
               Stay connected for the latest styles, drops, and exclusive offers.
             </p>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              {SOCIALS.map(({ Icon, label }) => (
+            <div className="flex items-center justify-center gap-3 sm:gap-4 flex-nowrap">
+              {SOCIALS.map(({ Icon, label, href }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-11 h-11 rounded-full border border-ember/40 flex items-center justify-center text-ember hover:bg-ember hover:text-void transition-all duration-200 hover:scale-110"
+                  className="w-9 h-9 md:w-11 md:h-11 rounded-full border border-ember/40 flex items-center justify-center text-ember hover:bg-ember hover:text-void transition-all duration-200 hover:scale-110 shrink-0"
                 >
-                  <Icon size={18} strokeWidth={1.75} />
+                  <Icon className="w-[15px] h-[15px] md:w-[18px] md:h-[18px]" strokeWidth={1.75} />
                 </a>
               ))}
             </div>
