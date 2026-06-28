@@ -1,10 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono:wght@400;700&family=Courier+Prime:wght@400;700&display=swap');
-
 @import "tailwindcss";
 
-/* ─────────────────────────────────────────
-   THEME — filled after design reference
-   ───────────────────────────────────────── */
 @theme {
   --color-void:        #080808;
   --color-violet:      #9B5CF6;
