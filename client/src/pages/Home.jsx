@@ -292,6 +292,14 @@ export function HomeContent() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const containerRef = useRef(null)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const [mountCanvas, setMountCanvas] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMountCanvas(true)
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
@@ -381,7 +389,8 @@ export function HomeContent() {
 
         {/* 3D Canvas */}
         <div className={cn("absolute inset-0 w-full h-full", isMobile ? "pointer-events-none" : "pointer-events-auto")}>
-          <Canvas camera={{ position: [0, 0, 5.0], fov: 38 }} style={{ pointerEvents: isMobile ? 'none' : 'auto' }}>
+          {mountCanvas && (
+            <Canvas camera={{ position: [0, 0, 5.0], fov: 38 }} style={{ pointerEvents: isMobile ? 'none' : 'auto' }}>
             <ambientLight intensity={1.5} />
             <directionalLight position={[3, 4, 5]} intensity={2.2} />
             <directionalLight position={[-4, 2, -3]} intensity={0.9} />
@@ -406,7 +415,8 @@ export function HomeContent() {
               />
               <Environment preset="studio" />
             </Suspense>
-          </Canvas>
+            </Canvas>
+          )}
         </div>
 
         {/* Step 1: Hero text — aligned to bottom on mobile, right side on desktop */}
@@ -572,14 +582,32 @@ function ColorsSection() {
   const activeConfig = COLOR_CONFIGS[activeIdx]
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const [inView, setInView] = useState(false)
+  const containerRef = useRef(null)
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setInView(true)
+        observer.disconnect()
+      }
+    }, { rootMargin: '200px' })
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section className="relative overflow-hidden bg-[#080808] border-t border-white/5">
+    <section ref={containerRef} className="relative overflow-hidden bg-[#080808] border-t border-white/5">
       {/* Section header */}
       <div className="px-6 md:px-16 pt-12 pb-6 border-b border-white/5">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet block mb-2">
@@ -603,15 +631,17 @@ function ColorsSection() {
               transition: 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)',
             }}
           >
-            <Canvas camera={{ position: [0, 0, isMobile ? 2.3 : 1.8], fov: 40 }} style={{ pointerEvents: 'none' }}>
-              <ambientLight intensity={1.8} />
-              <directionalLight position={[3, 4, 5]} intensity={2.5} />
-              <directionalLight position={[-4, 2, -3]} intensity={1.0} />
-              <Suspense fallback={null}>
-                <ColorSectionModel activeColorId={activeColor} />
-                <Environment preset="studio" />
-              </Suspense>
-            </Canvas>
+            {inView && (
+              <Canvas camera={{ position: [0, 0, isMobile ? 2.3 : 1.8], fov: 40 }} style={{ pointerEvents: 'none' }}>
+                <ambientLight intensity={1.8} />
+                <directionalLight position={[3, 4, 5]} intensity={2.5} />
+                <directionalLight position={[-4, 2, -3]} intensity={1.0} />
+                <Suspense fallback={null}>
+                  <ColorSectionModel activeColorId={activeColor} />
+                  <Environment preset="studio" />
+                </Suspense>
+              </Canvas>
+            )}
           </div>
 
           {COLOR_CONFIGS.map((color, idx) => {
