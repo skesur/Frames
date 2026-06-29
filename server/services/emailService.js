@@ -1,5 +1,9 @@
 import nodemailer from 'nodemailer'
 
+const isResendConfigured = () => {
+  return !!process.env.RESEND_API_KEY
+}
+
 const isSmtpConfigured = () => {
   return !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)
 }
@@ -198,41 +202,81 @@ export const sendOrderReceiptEmail = async (user, order) => {
 </html>
   `
 
-  if (!isSmtpConfigured()) {
-    console.log(`\n==================================================`)
-    console.log(`[Email Service Mock] SMTP is not configured. Mocking order email to user:`)
-    console.log(`To: ${user.email}`)
-    console.log(`Subject: [FRAMES] Order Confirmation - ${order.orderId}`)
-    console.log(`Summary of items:`)
-    order.items.forEach(item => console.log(`  - ${item.name} (${item.quantity}x @ ${formatPrice(item.price)})`))
-    console.log(`Total Price: ${formatPrice(order.pricing.total)}`)
-    console.log(`==================================================\n`)
-    return
-  }
+  // ----------------------------------------------------
+  // ENGINE 1: Resend HTTP API (Port 443, Bypass Firewall)
+  // ----------------------------------------------------
+  if (isResendConfigured()) {
+    try {
+      const fromAddress = process.env.SMTP_FROM || 'onboarding@resend.dev'
+      
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: fromAddress,
+          to: user.email,
+          subject: `[FRAMES] Order Confirmation - ${order.orderId}`,
+          html: emailHtml
+        })
+      })
 
-  try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587', 10),
-      secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
+      if (response.ok) {
+        console.log(`[Email Service - Resend] Confirmation email sent successfully to ${user.email} for order ${order.orderId}`)
+      } else {
+        const errBody = await response.text()
+        console.error(`[Email Service - Resend Error] Failed to send: ${response.status} ${response.statusText} - ${errBody}`)
       }
-    })
-
-    const fromAddress = process.env.SMTP_FROM || `"Frames Eyewear" <no-reply@frames.com>`
-
-    await transporter.sendMail({
-      from: fromAddress,
-      to: user.email,
-      subject: `[FRAMES] Order Confirmation - ${order.orderId}`,
-      html: emailHtml
-    })
-
-    console.log(`[Email Service] Confirmation email sent successfully to ${user.email} for order ${order.orderId}`)
-  } catch (error) {
-    console.error(`[Email Service Error] Failed to send order receipt email to ${user.email}:`, error)
-    // We intentionally swallow this error so it doesn't crash or block user checkout response
+      return
+    } catch (error) {
+      console.error(`[Email Service - Resend Network Error] Failed to fetch:`, error)
+      return
+    }
   }
+
+  // ----------------------------------------------------
+  // ENGINE 2: Nodemailer SMTP (Standard TCP connection)
+  // ----------------------------------------------------
+  if (isSmtpConfigured()) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587', 10),
+        secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      })
+
+      const fromAddress = process.env.SMTP_FROM || `"Frames Eyewear" <no-reply@frames.com>`
+
+      await transporter.sendMail({
+        from: fromAddress,
+        to: user.email,
+        subject: `[FRAMES] Order Confirmation - ${order.orderId}`,
+        html: emailHtml
+      })
+
+      console.log(`[Email Service - SMTP] Confirmation email sent successfully to ${user.email} for order ${order.orderId}`)
+      return
+    } catch (error) {
+      console.error(`[Email Service - SMTP Error] Failed to send email to ${user.email}:`, error)
+      return
+    }
+  }
+
+  // ----------------------------------------------------
+  // ENGINE 3: Console Mock (Local testing fallback)
+  // ----------------------------------------------------
+  console.log(`\n==================================================`)
+  console.log(`[Email Service Mock] Neither Resend nor SMTP is configured. Mocking order email to user:`)
+  console.log(`To: ${user.email}`)
+  console.log(`Subject: [FRAMES] Order Confirmation - ${order.orderId}`)
+  console.log(`Summary of items:`)
+  order.items.forEach(item => console.log(`  - ${item.name} (${item.quantity}x @ ${formatPrice(item.price)})`))
+  console.log(`Total Price: ${formatPrice(order.pricing.total)}`)
+  console.log(`==================================================\n`)
 }
