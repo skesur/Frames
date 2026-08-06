@@ -462,7 +462,13 @@ export default function Profile() {
       try {
         if (showLoader) setOrdersLoading(true)
         const res = await api.get('/orders/mine')
-        setOrders(res.data.orders)
+        const fetchedOrders = res.data.orders
+        setOrders(fetchedOrders)
+        setActiveOrder((prevActive) => {
+          if (!prevActive) return null
+          const updated = fetchedOrders.find((o) => o._id === prevActive._id)
+          return updated ? { ...prevActive, ...updated } : prevActive
+        })
       } catch (err) {
         console.error('Failed to fetch orders:', err.message)
       } finally {

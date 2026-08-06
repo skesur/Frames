@@ -25,6 +25,10 @@ function OrderDetailModal({ order, onClose, onStatusUpdated }) {
   const [saving, setSaving] = useState(false)
   const [error,  setError]  = useState('')
 
+  useEffect(() => {
+    setStatus(order.orderStatus || 'placed')
+  }, [order.orderStatus])
+
   async function handleStatusChange(newStatus) {
     setStatus(newStatus)
     setError('')
