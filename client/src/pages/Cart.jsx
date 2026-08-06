@@ -359,6 +359,7 @@ function OrderModal({ onClose, onSuccess }) {
                 className="field appearance-none pr-10 cursor-pointer"
               >
                 <option value="" disabled>Choose delivery method</option>
+                <option value="free">Free (7-10 days) — {formatPrice(0)}</option>
                 <option value="standard">Standard (5-7 days) — {formatPrice(600)}</option>
                 <option value="express">Express (2-3 days) — {formatPrice(1300)}</option>
                 <option value="overnight">Overnight (1 day) — {formatPrice(2500)}</option>
@@ -394,7 +395,7 @@ function OrderModal({ onClose, onSuccess }) {
             {[
               { label: 'Subtotal',        value: formatPrice(subtotal)      },
               { label: 'Lens Coating',    value: coatingPrice > 0 ? `+${formatPrice(coatingPrice)}` : 'Free' },
-              { label: 'Delivery',        value: deliveryPrice > 0 ? formatPrice(deliveryPrice) : '—'       },
+              { label: 'Delivery',        value: form.deliveryMethod ? (deliveryPrice > 0 ? formatPrice(deliveryPrice) : 'Free') : '—' },
               { label: 'GST (18%)',       value: formatPrice(tax)           },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between">

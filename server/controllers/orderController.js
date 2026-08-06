@@ -7,7 +7,7 @@ import { sendOrderReceiptEmail } from '../services/emailService.js'
 
 const LENS_COATINGS = ['standard', 'none', 'anti-glare', 'blue-light', 'photochromic']
 const LENS_TYPES = ['zero-power', 'power']
-const DELIVERY_METHODS = ['standard', 'express', 'overnight']
+const DELIVERY_METHODS = ['free', 'standard', 'express', 'overnight']
 const PAYMENT_METHODS = ['cod', 'card', 'upi', 'netbanking']
 
 async function validateOrderPayload(body) {
