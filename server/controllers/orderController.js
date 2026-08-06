@@ -1,7 +1,9 @@
 import Order from '../models/Order.js'
 import Product from '../models/Product.js'
+import User from '../models/User.js'
 import mongoose from 'mongoose'
 import { AppError } from '../middleware/errorHandler.js'
+import { sendOrderReceiptEmail } from '../services/emailService.js'
 
 const LENS_COATINGS = ['standard', 'none', 'anti-glare', 'blue-light', 'photochromic']
 const LENS_TYPES = ['zero-power', 'power']
@@ -79,6 +81,16 @@ export const createOrder = async (req, res, next) => {
   try {
     await validateOrderPayload(req.body)
     const order = await Order.create({ user: req.user.id, ...req.body })
+    
+    // Fetch user email details & send receipt email asynchronously (non-blocking)
+    User.findById(req.user.id).then((user) => {
+      if (user) {
+        sendOrderReceiptEmail(user, order)
+      }
+    }).catch((err) => {
+      console.error('[Order Controller] Failed to fetch user for receipt email:', err)
+    })
+
     res.status(201).json({ success: true, order })
   } catch (err) {
     next(err)
