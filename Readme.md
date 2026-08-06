@@ -11,3 +11,8 @@ cd client && npm install && npm run dev
 
 ### Server
 cd server && npm install && npm run dev
+
+# Razorpay API Credentials:
+
+api_key = rzp_live_TMVZHeLxDHWssv
+api_secret_key = J37J4z9wSvn36AFTDbGNzz5K

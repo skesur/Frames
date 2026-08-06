@@ -12,6 +12,8 @@ import { useAuthStore }  from '@/store/authStore'
 import { formatPrice, cn } from '@/lib/utils'
 import api               from '@/lib/axios'
 
+import { loadRazorpayScript } from '@/utils/loadRazorpay'
+
 const TAX_RATE       = 0.18
 const COATING_PRICES = { standard: 0, 'anti-glare': 500, 'blue-light': 800, photochromic: 1500 }
 const DELIVERY_PRICES = { standard: 600, express: 1300, overnight: 2500 }
@@ -33,7 +35,7 @@ function OrderModal({ onClose, onSuccess }) {
     pincode:        '',
     phone:          '',
     deliveryMethod: '',
-    paymentMethod:  '',
+    paymentMethod:  'card',
   })
   const [placing,  setPlacing]  = useState(false)
   const [error,    setError]    = useState('')
@@ -55,41 +57,96 @@ function OrderModal({ onClose, onSuccess }) {
     if (!form.deliveryMethod) return setError('Please select a delivery method.')
     if (!form.paymentMethod)  return setError('Please select a payment method.')
 
+    const payload = {
+      items: items.map((i) => ({
+        product:  i._id,
+        name:     i.name,
+        price:    i.price,
+        quantity: i.quantity,
+        image:    i.images?.[0] || '',
+      })),
+      prescription: {
+        lensType:      form.lensType,
+        leftPower:     form.leftPower  || 'N/A',
+        rightPower:    form.rightPower || 'N/A',
+        leftCylinder:  form.leftCylinder  || 'N/A',
+        rightCylinder: form.rightCylinder || 'N/A',
+      },
+      lensCoating:   form.lensCoating,
+      delivery: {
+        method:  form.deliveryMethod,
+        address: form.address,
+        pincode: form.pincode,
+        phone:   form.phone,
+      },
+      pricing: { subtotal, coatingPrice, deliveryPrice, tax, total },
+      paymentMethod: form.paymentMethod,
+    }
+
     try {
       setPlacing(true)
-      const payload = {
-        items: items.map((i) => ({
-          product:  i._id,
-          name:     i.name,
-          price:    i.price,
-          quantity: i.quantity,
-          image:    i.images?.[0] || '',
-        })),
-        prescription: {
-          lensType:      form.lensType,
-          leftPower:     form.leftPower  || 'N/A',
-          rightPower:    form.rightPower || 'N/A',
-          leftCylinder:  form.leftCylinder  || 'N/A',
-          rightCylinder: form.rightCylinder || 'N/A',
-        },
-        lensCoating:   form.lensCoating,
-        delivery: {
-          method:  form.deliveryMethod,
-          address: form.address,
-          pincode: form.pincode,
-          phone:   form.phone,
-        },
-        pricing: { subtotal, coatingPrice, deliveryPrice, tax, total },
-        paymentMethod: form.paymentMethod,
-        paymentStatus: 'paid', // simulated
+
+      // Handle Cash on Delivery
+      if (form.paymentMethod === 'cod') {
+        await api.post('/orders', { ...payload, paymentStatus: 'pending' })
+        clearCart()
+        onSuccess()
+        return
       }
 
-      await api.post('/orders', payload)
-      clearCart()
-      onSuccess()
+      // Handle Online Payment (Razorpay)
+      const isLoaded = await loadRazorpayScript()
+      if (!isLoaded) {
+        throw new Error('Failed to load Razorpay Checkout SDK. Please check your network connection.')
+      }
+
+      // Create Razorpay Order on server
+      const { data } = await api.post('/payment/create-order', { amount: total })
+      const { order, keyId } = data
+
+      const options = {
+        key: keyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Frames Eyewear',
+        description: `Order total: ₹${total.toLocaleString('en-IN')}`,
+        order_id: order.id,
+        handler: async function (response) {
+          try {
+            setPlacing(true)
+            await api.post('/payment/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              orderPayload: payload,
+            })
+            clearCart()
+            onSuccess()
+          } catch (verifyErr) {
+            setError(verifyErr.response?.data?.message || 'Payment verification failed.')
+          } finally {
+            setPlacing(false)
+          }
+        },
+        prefill: {
+          name: user?.name || '',
+          email: user?.email || '',
+          contact: form.phone || '',
+        },
+        theme: {
+          color: '#ff6b35',
+        },
+        modal: {
+          ondismiss: function () {
+            setPlacing(false)
+          },
+        },
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.open()
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to place order. Please try again.')
-    } finally {
+      setError(err.response?.data?.message || err.message || 'Failed to place order. Please try again.')
       setPlacing(false)
     }
   }
