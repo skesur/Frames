@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, Lock, ShoppingBag, Star } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Lock, ShoppingBag, Star, Heart } from 'lucide-react'
 import api from '@/lib/axios'
 import { fallbackProducts } from '@/data/products'
 import { useAuthStore } from '@/store/authStore'
 import { useCartStore } from '@/store/cartStore'
+import { useWishlistStore } from '@/store/wishlistStore'
 import { cn, formatPrice } from '@/lib/utils'
 
 function isObjectId(value = '') {
@@ -23,6 +24,8 @@ export default function Product() {
   const { identifier } = useParams()
   const navigate = useNavigate()
   const addItem = useCartStore((s) => s.addItem)
+  const toggleWishlist = useWishlistStore((s) => s.toggleItem)
+  const isInWishlist = useWishlistStore((s) => s.isInWishlist)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const token = useAuthStore((s) => s.token)
 
@@ -31,6 +34,14 @@ export default function Product() {
   const [error, setError] = useState('')
   const [activeImage, setActiveImage] = useState(0)
   const [notice, setNotice] = useState('')
+
+  const isWishlisted = product ? isInWishlist(product._id) : false
+
+  function handleToggleWishlist() {
+    if (!product) return
+    const res = toggleWishlist(product)
+    setNotice(res.message)
+  }
 
   useEffect(() => {
     async function fetchProduct() {
@@ -181,28 +192,44 @@ export default function Product() {
               ))}
             </div>
 
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              disabled={isOutOfStock}
-              className={cn(
-                'inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-8 py-3.5 font-dm text-sm font-semibold transition-all duration-200',
-                isOutOfStock
-                  ? 'bg-white/[0.06] text-ghost-muted cursor-not-allowed border border-white/[0.08]'
-                  : isAuthenticated && token
-                    ? 'bg-violet hover:bg-violet-dark text-void hover:shadow-[0_0_24px_rgba(155,92,246,0.32)]'
-                    : 'bg-ember hover:bg-ember-dark text-void hover:shadow-[0_0_24px_rgba(255,107,53,0.28)]'
-              )}
-            >
-              {isOutOfStock ? (
-                <span>Out of Stock</span>
-              ) : (
-                <>
-                  {isAuthenticated && token ? <ShoppingBag size={17} /> : <Lock size={17} />}
-                  Add To Cart
-                </>
-              )}
-            </button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={isOutOfStock}
+                className={cn(
+                  'inline-flex flex-1 sm:flex-initial items-center justify-center gap-2 rounded-full px-8 py-3.5 font-dm text-sm font-semibold transition-all duration-200',
+                  isOutOfStock
+                    ? 'bg-white/[0.06] text-ghost-muted cursor-not-allowed border border-white/[0.08]'
+                    : isAuthenticated && token
+                      ? 'bg-violet hover:bg-violet-dark text-void hover:shadow-[0_0_24px_rgba(155,92,246,0.32)]'
+                      : 'bg-ember hover:bg-ember-dark text-void hover:shadow-[0_0_24px_rgba(255,107,53,0.28)]'
+                )}
+              >
+                {isOutOfStock ? (
+                  <span>Out of Stock</span>
+                ) : (
+                  <>
+                    {isAuthenticated && token ? <ShoppingBag size={17} /> : <Lock size={17} />}
+                    Add To Cart
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleToggleWishlist}
+                className={cn(
+                  'inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 font-dm text-sm font-semibold transition-all duration-200 border',
+                  isWishlisted
+                    ? 'bg-ember/15 border-ember/40 text-ember'
+                    : 'bg-white/[0.03] border-white/[0.1] text-ghost-muted hover:text-ghost hover:border-white/20'
+                )}
+              >
+                <Heart size={16} className={cn(isWishlisted && 'fill-ember')} />
+                {isWishlisted ? 'Saved to Wishlist' : 'Wishlist'}
+              </button>
+            </div>
 
             {notice && (
               <p className="mt-4 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 font-dm text-sm text-ghost-muted">

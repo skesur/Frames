@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation }   from 'react-router-dom'
-import { ShoppingBag, User, Menu, X } from 'lucide-react'
+import { ShoppingBag, User, Heart, Menu, X } from 'lucide-react'
 import { useCartStore }          from '@/store/cartStore'
+import { useWishlistStore }      from '@/store/wishlistStore'
 import { useAuthStore }          from '@/store/authStore'
 import { useUIStore }            from '@/store/uiStore'
 import { cn }                    from '@/lib/utils'
@@ -21,8 +22,10 @@ export default function Navbar() {
   const location = useLocation()
 
   const items = useCartStore((s) => s.items)
+  const wishlistItems = useWishlistStore((s) => s.items)
   const { isAuthenticated, logout } = useAuthStore()
   const cartCount = items.reduce((sum, i) => sum + i.quantity, 0)
+  const wishlistCount = wishlistItems.length
 
   const navbarLogoRef = useRef(null)
   const logoTextRef = useRef(null)
@@ -212,6 +215,20 @@ export default function Navbar() {
 
             <div className="flex items-center gap-6">
               <Link
+                to="/wishlist"
+                aria-label={wishlistCount > 0 ? `Wishlist (${wishlistCount} items)` : 'Wishlist'}
+                className="desktop-nav-action relative w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90 hover:text-ember hover:border-ember/45 transition-colors duration-200"
+                style={{ opacity: 0 }}
+              >
+                <Heart size={16} strokeWidth={1.75} className={cn(wishlistCount > 0 && 'text-ember fill-ember/20')} />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-ember text-void font-mono text-[10px] font-bold flex items-center justify-center leading-none">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+
+              <Link
                 to={isAuthenticated ? '/profile' : '/login'}
                 aria-label="Profile"
                 className="desktop-nav-action w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90 hover:text-orange-500 hover:border-violet/45 transition-colors duration-200"
@@ -285,7 +302,19 @@ export default function Navbar() {
                 {label}
               </Link>
             ))}
-            <div className="flex flex-col items-center gap-3 pt-4 mt-2 border-t border-white/[0.06]">
+            <div className="flex items-center gap-4 pt-4 mt-2 border-t border-white/[0.06]">
+              <Link
+                to="/wishlist"
+                aria-label={wishlistCount > 0 ? `Wishlist (${wishlistCount} items)` : 'Wishlist'}
+                className="relative w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90"
+              >
+                <Heart size={16} strokeWidth={1.75} className={cn(wishlistCount > 0 && 'text-ember fill-ember/20')} />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-ember text-void font-mono text-[10px] font-bold flex items-center justify-center leading-none">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
               <Link
                 to={isAuthenticated ? '/profile' : '/login'}
                 className="w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90"

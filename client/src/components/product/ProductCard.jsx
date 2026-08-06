@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link }               from 'react-router-dom'
-import { Lock, ShoppingBag }  from 'lucide-react'
-import { useCartStore } from '@/store/cartStore'
-import { useAuthStore } from '@/store/authStore'
-import { formatPrice }  from '@/lib/utils'
-import { cn }           from '@/lib/utils'
+import { Lock, ShoppingBag, Heart }  from 'lucide-react'
+import { useCartStore }     from '@/store/cartStore'
+import { useWishlistStore } from '@/store/wishlistStore'
+import { useAuthStore }     from '@/store/authStore'
+import { formatPrice }      from '@/lib/utils'
+import { cn }               from '@/lib/utils'
 
 const BADGE_STYLES = {
   'Best Seller': 'bg-violet/15 text-violet border-violet/25',
@@ -52,6 +53,8 @@ function getStockIndicator(product) {
 
 export default function ProductCard({ product, className }) {
   const addItem = useCartStore((s) => s.addItem)
+  const toggleWishlist = useWishlistStore((s) => s.toggleItem)
+  const isWishlisted = useWishlistStore((s) => s.isInWishlist(product._id))
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const token = useAuthStore((s) => s.token)
   const [feedback, setFeedback] = useState(null)
@@ -64,6 +67,13 @@ export default function ProductCard({ product, className }) {
   }, [feedback])
 
   const stockInfo = getStockIndicator(product)
+
+  function handleToggleWishlist(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    const res = toggleWishlist(product)
+    setFeedback({ type: res.added ? 'success' : 'info', text: res.message })
+  }
 
   function handleAdd(e) {
     e.preventDefault()
@@ -135,6 +145,21 @@ export default function ProductCard({ product, className }) {
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
             style={{ background: 'radial-gradient(ellipse at center, rgba(155,92,246,0.08) 0%, transparent 70%)' }}
           />
+
+          {/* Wishlist toggle button */}
+          <button
+            type="button"
+            onClick={handleToggleWishlist}
+            aria-label={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
+            className={cn(
+              'absolute bottom-2 right-2 z-20 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-md border shadow-md',
+              isWishlisted
+                ? 'bg-ember/25 border-ember/50 text-ember'
+                : 'bg-black/50 border-white/15 text-ghost-muted hover:text-ember hover:border-ember/40'
+            )}
+          >
+            <Heart size={13} className={cn(isWishlisted && 'fill-ember')} />
+          </button>
         </div>
       </Link>
 
