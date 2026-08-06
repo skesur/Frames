@@ -16,7 +16,7 @@ import { loadRazorpayScript } from '@/utils/loadRazorpay'
 
 const TAX_RATE       = 0.18
 const COATING_PRICES = { standard: 0, 'anti-glare': 500, 'blue-light': 800, photochromic: 1500 }
-const DELIVERY_PRICES = { standard: 600, express: 1300, overnight: 2500 }
+const DELIVERY_PRICES = { free : 0, standard: 600, express: 1300, overnight: 2500 }
 
 /* ── Order Modal ───────────────────────── */
 function OrderModal({ onClose, onSuccess }) {

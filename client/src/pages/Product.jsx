@@ -73,6 +73,37 @@ export default function Product() {
     return product.images
   }, [product])
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-void pt-24 md:pt-28 pb-20 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-full border border-violet/20 border-t-violet animate-spin" />
+          <p className="font-mono text-xs uppercase tracking-widest text-ghost-muted animate-pulse">Scanning Database...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !product) {
+    return (
+      <div className="min-h-screen bg-void pt-24 md:pt-28 pb-20 flex flex-col items-center justify-center gap-4 text-center px-4">
+        <h1 className="font-syne font-bold text-ghost text-2xl md:text-3xl leading-tight">
+          {error || 'Frame Not Found'}
+        </h1>
+        <p className="font-dm text-sm text-ghost-muted max-w-md">
+          We couldn't locate the cybernetic frame you requested. It may have been decommissioned or the address is incorrect.
+        </p>
+        <Link
+          to="/shop"
+          className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-6 py-2.5 font-dm text-sm text-ghost-muted hover:text-ghost hover:border-white/20 transition-colors"
+        >
+          <ArrowLeft size={16} /> Back to Eyewear Store
+        </Link>
+      </div>
+    )
+  }
+
+
   function handleAddToCart() {
     if (!isAuthenticated || !token) {
       setNotice('Login required to add frames to your cart.')
