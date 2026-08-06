@@ -5,11 +5,15 @@ import { formatPrice, cn } from '@/lib/utils'
 import { useModalLock } from '@/hooks/useModalLock'
 
 const STATUSES = [
-  { id: 'all', label: 'All' }, { id: 'processing', label: 'Processing' },
-  { id: 'shipped', label: 'Shipped' }, { id: 'delivered', label: 'Delivered' },
+  { id: 'all',        label: 'All'        },
+  { id: 'placed',     label: 'Placed'     },
+  { id: 'processing', label: 'Processing' },
+  { id: 'shipped',    label: 'Shipped'    },
+  { id: 'delivered',  label: 'Delivered'  },
 ]
 
 const STATUS_STYLES = {
+  placed:     { color: 'text-sky-400',   bg: 'bg-sky-400/10',   border: 'border-sky-400/20'   },
   processing: { color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20' },
   shipped:    { color: 'text-violet',    bg: 'bg-violet/10',    border: 'border-violet/20'    },
   delivered:  { color: 'text-teal',      bg: 'bg-teal/10',      border: 'border-teal/20'      },
@@ -17,7 +21,7 @@ const STATUS_STYLES = {
 
 function OrderDetailModal({ order, onClose, onStatusUpdated }) {
   useModalLock()
-  const [status, setStatus] = useState(order.orderStatus)
+  const [status, setStatus] = useState(order.orderStatus || 'placed')
   const [saving, setSaving] = useState(false)
   const [error,  setError]  = useState('')
 
@@ -30,7 +34,7 @@ function OrderDetailModal({ order, onClose, onStatusUpdated }) {
       onStatusUpdated(res.data.order)
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update status')
-      setStatus(order.orderStatus)
+      setStatus(order.orderStatus || 'placed')
     } finally {
       setSaving(false)
     }
@@ -65,12 +69,40 @@ function OrderDetailModal({ order, onClose, onStatusUpdated }) {
         <div className="p-6 space-y-5">
 
           <div>
-            <p className="font-mono text-[10px] text-ghost/40 uppercase tracking-widest mb-2">Order Status</p>
+            <p className="font-mono text-[10px] text-ghost/40 uppercase tracking-widest mb-2.5">Update Order Tracking Status</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+              {[
+                { val: 'placed', label: 'Placed' },
+                { val: 'processing', label: 'Processing' },
+                { val: 'shipped', label: 'Shipped' },
+                { val: 'delivered', label: 'Delivered' },
+              ].map(({ val, label }) => {
+                const isSelected = status === val
+                return (
+                  <button
+                    key={val}
+                    type="button"
+                    disabled={saving}
+                    onClick={() => handleStatusChange(val)}
+                    className={cn(
+                      'py-2 px-2.5 rounded-lg border font-dm text-xs transition-all text-center capitalize',
+                      isSelected
+                        ? 'bg-violet border-violet text-void font-bold shadow-[0_0_12px_rgba(155,92,246,0.3)]'
+                        : 'border-white/[0.1] bg-white/[0.02] text-ghost-muted hover:border-white/20 hover:text-ghost'
+                    )}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
+
             <div className="relative">
               <select value={status} onChange={(e) => handleStatusChange(e.target.value)} disabled={saving} className="field appearance-none pr-10 cursor-pointer">
-                <option value="processing">Processing</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
+                <option value="placed">Placed — Order Created</option>
+                <option value="processing">Processing — Quality Check & Lens Setup</option>
+                <option value="shipped">Shipped — Dispatched in Transit</option>
+                <option value="delivered">Delivered — Package Delivered</option>
               </select>
               <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ghost-muted pointer-events-none" />
             </div>

@@ -6,7 +6,7 @@ import ContactMessage from '../models/ContactMessage.js'
 import { AppError }   from '../middleware/errorHandler.js'
 
 const PRODUCT_CATEGORIES = ['top-sellers', 'new-arrivals', 'round-frames', 'square-frames', 'sunglasses']
-const ORDER_STATUSES     = ['processing', 'shipped', 'delivered']
+const ORDER_STATUSES     = ['placed', 'processing', 'shipped', 'delivered']
 
 const isValidId = (id) => mongoose.Types.ObjectId.isValid(id)
 

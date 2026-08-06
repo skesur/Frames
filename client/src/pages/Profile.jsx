@@ -80,9 +80,84 @@ function PasswordField({ label, value, onChange, placeholder }) {
 }
 
 const ORDER_STATUS_STYLES = {
-  processing: { color: 'text-amber-400',  bg: 'bg-amber-400/10',  border: 'border-amber-400/20', Icon: Clock         },
-  shipped:    { color: 'text-violet',     bg: 'bg-violet/10',     border: 'border-violet/20',    Icon: Truck         },
-  delivered:  { color: 'text-teal',       bg: 'bg-teal/10',       border: 'border-teal/20',      Icon: CheckCircle   },
+  placed:     { color: 'text-sky-400',   bg: 'bg-sky-400/10',   border: 'border-sky-400/20',   Icon: CheckCircle },
+  processing: { color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20', Icon: Clock       },
+  shipped:    { color: 'text-violet',    bg: 'bg-violet/10',    border: 'border-violet/20',    Icon: Truck       },
+  delivered:  { color: 'text-teal',      bg: 'bg-teal/10',      border: 'border-teal/20',      Icon: CheckCircle },
+}
+
+const TRACKING_STEPS = [
+  { key: 'placed',     label: 'Order Placed', desc: 'Order confirmed & received', Icon: CheckCircle },
+  { key: 'processing', label: 'Processing',   desc: 'Lens fitting & quality check', Icon: Clock },
+  { key: 'shipped',    label: 'Shipped',      desc: 'Dispatched with courier', Icon: Truck },
+  { key: 'delivered',  label: 'Delivered',    desc: 'Delivered to your address', Icon: CheckCircle },
+]
+
+function OrderTrackerDiagram({ currentStatus = 'placed' }) {
+  const statusIndex = TRACKING_STEPS.findIndex((s) => s.key === currentStatus)
+  const activeIdx = statusIndex >= 0 ? statusIndex : 0
+  const progressPercent = (activeIdx / (TRACKING_STEPS.length - 1)) * 100
+
+  return (
+    <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="font-mono text-[10px] text-violet uppercase tracking-widest">Order Tracking Diagram</p>
+          <h4 className="font-syne font-bold text-ghost text-base mt-0.5 capitalize">
+            Status: {currentStatus}
+          </h4>
+        </div>
+        <span className="font-mono text-[10px] text-teal px-2.5 py-1 rounded-full border border-teal/20 bg-teal/10 uppercase tracking-widest">
+          Stage {activeIdx + 1} of 4
+        </span>
+      </div>
+
+      {/* Progress timeline line + nodes */}
+      <div className="relative pt-2 pb-2">
+        {/* Track Line */}
+        <div className="absolute top-7 left-7 right-7 h-1 bg-white/[0.08] rounded-full -z-0">
+          <div
+            className="h-full bg-gradient-to-r from-violet via-ember to-teal rounded-full transition-all duration-700 ease-out"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+
+        {/* Step Nodes */}
+        <div className="relative z-10 flex items-center justify-between">
+          {TRACKING_STEPS.map((step, idx) => {
+            const isCompleted = idx < activeIdx
+            const isCurrent = idx === activeIdx
+            const StepIcon = step.Icon
+
+            return (
+              <div key={step.key} className="flex flex-col items-center text-center max-w-[80px] sm:max-w-[110px]">
+                <div
+                  className={cn(
+                    'w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 font-bold',
+                    isCompleted && 'bg-teal border border-teal text-void shadow-[0_0_14px_rgba(0,245,196,0.4)]',
+                    isCurrent && 'bg-ember border-2 border-ember text-void ring-4 ring-ember/20 shadow-[0_0_20px_rgba(255,107,53,0.5)] animate-pulse',
+                    !isCompleted && !isCurrent && 'bg-[#121212] border border-white/[0.15] text-ghost-muted/40'
+                  )}
+                >
+                  <StepIcon size={17} strokeWidth={2} />
+                </div>
+
+                <p className={cn(
+                  'font-syne font-semibold text-xs mt-3 leading-tight',
+                  isCurrent ? 'text-ember' : isCompleted ? 'text-ghost' : 'text-ghost-muted/50'
+                )}>
+                  {step.label}
+                </p>
+                <p className="font-dm text-[10px] text-ghost-muted/70 mt-1 hidden sm:block leading-tight">
+                  {step.desc}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 /* ── Edit Profile Modal ── */
@@ -240,7 +315,7 @@ function OrderDetailsModal({ order, onClose }) {
   useModalLock()
   if (!order) return null
 
-  const st = ORDER_STATUS_STYLES[order.orderStatus] || ORDER_STATUS_STYLES.processing
+  const st = ORDER_STATUS_STYLES[order.orderStatus] || ORDER_STATUS_STYLES.placed
 
   return (
     <div
@@ -252,7 +327,7 @@ function OrderDetailsModal({ order, onClose }) {
         data-lenis-prevent
         onWheel={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
-        className="modal-scroll w-full sm:max-w-lg max-h-[90dvh] min-h-0 overflow-y-auto overscroll-contain rounded-t-2xl sm:rounded-2xl border border-white/[0.08] bg-[#0c0c0c]"
+        className="modal-scroll w-full sm:max-w-xl max-h-[90dvh] min-h-0 overflow-y-auto overscroll-contain rounded-t-2xl sm:rounded-2xl border border-white/[0.08] bg-[#0c0c0c]"
       >
 
         {/* Header */}
@@ -271,10 +346,13 @@ function OrderDetailsModal({ order, onClose }) {
 
         <div className="p-6 space-y-5">
 
-          {/* Status */}
+          {/* Interactive Order Tracking Diagram */}
+          <OrderTrackerDiagram currentStatus={order.orderStatus} />
+
+          {/* Status badge */}
           <div className={cn('flex items-center gap-2 px-4 py-3 rounded-lg border text-sm font-dm', st.color, st.bg, st.border)}>
             <st.Icon size={15} strokeWidth={1.75} />
-            <span className="capitalize">{order.orderStatus}</span>
+            <span className="capitalize">Current Status: {order.orderStatus}</span>
           </div>
 
           {/* Items */}
