@@ -5,6 +5,7 @@ import Product from '../models/Product.js'
 import User from '../models/User.js'
 import { AppError } from '../middleware/errorHandler.js'
 import { sendOrderReceiptEmail } from '../services/emailService.js'
+import { startOrderStatusAutomation } from '../services/orderAutomationService.js'
 
 // Create a Razorpay Order ID for the given cart total
 export const createRazorpayOrder = async (req, res, next) => {
@@ -90,6 +91,9 @@ export const verifyRazorpayPayment = async (req, res, next) => {
         razorpay_signature,
       },
     })
+
+    // Start automated background order status transitions
+    startOrderStatusAutomation(order._id, order.paymentMethod)
 
     // Send order receipt email (non-blocking)
     User.findById(req.user.id)

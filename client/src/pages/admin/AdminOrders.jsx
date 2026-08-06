@@ -193,24 +193,44 @@ export default function AdminOrders() {
   const [status,  setStatus]  = useState('all')
   const [active,  setActive]  = useState(null)
 
-  async function fetchOrders() {
+  async function fetchOrders(showLoader = true) {
     try {
-      setLoading(true)
+      if (showLoader) setLoading(true)
       const params = {}
       if (search) params.search = search
       if (status !== 'all') params.status = status
       const res = await api.get('/admin/orders', { params })
-      setOrders(res.data.orders)
+      const fetchedOrders = res.data.orders
+      setOrders(fetchedOrders)
+
+      // Sync the active order details in real time if modal is open
+      setActive((prevActive) => {
+        if (!prevActive) return null
+        const updated = fetchedOrders.find((o) => o._id === prevActive._id)
+        return updated ? { ...prevActive, ...updated } : prevActive
+      })
     } catch (err) {
       console.error(err)
     } finally {
-      setLoading(false)
+      if (showLoader) setLoading(false)
     }
   }
 
   useEffect(() => {
-    const t = setTimeout(fetchOrders, 300)
-    return () => clearTimeout(t)
+    // Debounce the initial fetch to prevent search spamming
+    const t = setTimeout(() => {
+      fetchOrders(true)
+    }, 300)
+
+    // Poll every 3 seconds for status changes in real-time
+    const interval = setInterval(() => {
+      fetchOrders(false)
+    }, 3000)
+
+    return () => {
+      clearTimeout(t)
+      clearInterval(interval)
+    }
   }, [search, status])
 
   function handleStatusUpdated(updated) {

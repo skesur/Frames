@@ -454,21 +454,31 @@ export default function Profile() {
     if (!isAuthenticated) navigate('/login')
   }, [isAuthenticated, navigate])
 
-  // Fetch order history
+  // Fetch order history with polling for real-time updates
   useEffect(() => {
     if (!isAuthenticated) return
-    async function fetchOrders() {
+    
+    async function fetchOrders(showLoader = false) {
       try {
-        setOrdersLoading(true)
+        if (showLoader) setOrdersLoading(true)
         const res = await api.get('/orders/mine')
         setOrders(res.data.orders)
       } catch (err) {
         console.error('Failed to fetch orders:', err.message)
       } finally {
-        setOrdersLoading(false)
+        if (showLoader) setOrdersLoading(false)
       }
     }
-    fetchOrders()
+
+    // Initial fetch with loader
+    fetchOrders(true)
+
+    // Poll every 3 seconds for status changes
+    const interval = setInterval(() => {
+      fetchOrders(false)
+    }, 3000)
+
+    return () => clearInterval(interval)
   }, [isAuthenticated])
 
   async function handleDelete() {

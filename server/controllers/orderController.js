@@ -4,6 +4,7 @@ import User from '../models/User.js'
 import mongoose from 'mongoose'
 import { AppError } from '../middleware/errorHandler.js'
 import { sendOrderReceiptEmail } from '../services/emailService.js'
+import { startOrderStatusAutomation } from '../services/orderAutomationService.js'
 
 const LENS_COATINGS = ['standard', 'none', 'anti-glare', 'blue-light', 'photochromic']
 const LENS_TYPES = ['zero-power', 'power']
@@ -111,6 +112,9 @@ export const createOrder = async (req, res, next) => {
     }
 
     const order = await Order.create({ user: req.user.id, ...req.body })
+    
+    // Start automated background order status transitions
+    startOrderStatusAutomation(order._id, order.paymentMethod)
     
     // Fetch user email details & send receipt email asynchronously (non-blocking)
     User.findById(req.user.id).then((user) => {
