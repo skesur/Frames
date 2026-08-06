@@ -68,40 +68,27 @@ export default function Product() {
       return
     }
 
-    addItem(product)
-    setNotice('Added to cart.')
+    if (product.inStock === false || product.stock === 0) {
+      setNotice('This frame is currently out of stock.')
+      return
+    }
+
+    const res = addItem(product)
+    if (res && res.success === false) {
+      setNotice(res.message)
+    } else {
+      setNotice('Added to cart.')
+    }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-void pt-28 pb-20">
-        <div className="frame-container grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="h-[420px] rounded-xl bg-white/[0.03] animate-pulse" />
-          <div className="space-y-4">
-            <div className="h-8 w-2/3 rounded bg-white/[0.04] animate-pulse" />
-            <div className="h-4 w-full rounded bg-white/[0.03] animate-pulse" />
-            <div className="h-4 w-4/5 rounded bg-white/[0.03] animate-pulse" />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (error || !product) {
-    return (
-      <div className="min-h-screen bg-void pt-28 pb-20">
-        <div className="frame-container">
-          <button onClick={() => navigate(-1)} className="inline-flex items-center gap-2 text-ghost-muted hover:text-ghost font-dm text-sm mb-8">
-            <ArrowLeft size={16} /> Back
-          </button>
-          <div className="rounded-xl border border-red-400/20 bg-red-400/10 p-8 text-center">
-            <p className="font-syne font-bold text-xl text-ghost mb-2">Product not found</p>
-            <p className="font-dm text-sm text-red-200/80">{error || 'This frame is unavailable.'}</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const isOutOfStock = product.inStock === false || product.stock === 0
+  const stockPill = isOutOfStock
+    ? { label: 'Out of stock', cls: 'border-red-400/30 bg-red-400/10 text-red-300' }
+    : product.stock === 1
+    ? { label: 'Only 1 left', cls: 'border-ember/40 bg-ember/15 text-ember animate-pulse' }
+    : product.stock > 1 && product.stock <= 5
+    ? { label: product.stock === 5 ? 'Only Five Frames left' : `Only ${product.stock} left`, cls: 'border-ember/30 bg-ember/10 text-ember' }
+    : { label: `In stock (${product.stock ?? 10} available)`, cls: 'border-teal/20 bg-teal/10 text-teal' }
 
   return (
     <div className="min-h-screen bg-void pt-24 md:pt-28 pb-20">
@@ -124,8 +111,11 @@ export default function Product() {
               <img
                 src={images[activeImage]}
                 alt={product.name}
-                className="relative z-10 max-h-[78%] max-w-[88%] object-contain rounded-xl"
-                style={{ filter: 'drop-shadow(0 22px 55px rgba(155,92,246,0.22))' }}
+                className={cn(
+                  'relative z-10 max-h-[78%] max-w-[88%] object-contain rounded-xl',
+                  isOutOfStock && 'opacity-40 grayscale'
+                )}
+                style={{ filter: isOutOfStock ? 'none' : 'drop-shadow(0 22px 55px rgba(155,92,246,0.22))' }}
               />
             </div>
 
@@ -152,7 +142,9 @@ export default function Product() {
             <div className="flex flex-wrap gap-2 mb-5">
               <DetailPill>{product.category?.replace(/-/g, ' ')}</DetailPill>
               {product.badge && <DetailPill>{product.badge}</DetailPill>}
-              <DetailPill>{product.inStock === false ? 'Out of stock' : 'In stock'}</DetailPill>
+              <span className={cn('rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest', stockPill.cls)}>
+                {stockPill.label}
+              </span>
             </div>
 
             <h1 className="font-syne font-bold text-ghost text-3xl md:text-5xl leading-tight mb-4">
@@ -192,18 +184,24 @@ export default function Product() {
             <button
               type="button"
               onClick={handleAddToCart}
-              disabled={product.inStock === false}
+              disabled={isOutOfStock}
               className={cn(
                 'inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full px-8 py-3.5 font-dm text-sm font-semibold transition-all duration-200',
-                product.inStock === false
-                  ? 'bg-white/[0.06] text-ghost-muted cursor-not-allowed'
+                isOutOfStock
+                  ? 'bg-white/[0.06] text-ghost-muted cursor-not-allowed border border-white/[0.08]'
                   : isAuthenticated && token
                     ? 'bg-violet hover:bg-violet-dark text-void hover:shadow-[0_0_24px_rgba(155,92,246,0.32)]'
                     : 'bg-ember hover:bg-ember-dark text-void hover:shadow-[0_0_24px_rgba(255,107,53,0.28)]'
               )}
             >
-              {isAuthenticated && token ? <ShoppingBag size={17} /> : <Lock size={17} />}
-              Add To Cart
+              {isOutOfStock ? (
+                <span>Out of Stock</span>
+              ) : (
+                <>
+                  {isAuthenticated && token ? <ShoppingBag size={17} /> : <Lock size={17} />}
+                  Add To Cart
+                </>
+              )}
             </button>
 
             {notice && (

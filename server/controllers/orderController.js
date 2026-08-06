@@ -39,9 +39,28 @@ async function validateOrderPayload(body) {
   }
 
   const productIds = body.items.map((item) => item.product)
-  const foundCount = await Product.countDocuments({ _id: { $in: productIds } })
-  if (foundCount !== new Set(productIds.map(String)).size) {
+  const products = await Product.find({ _id: { $in: productIds } })
+  const productMap = new Map(products.map((p) => [String(p._id), p]))
+
+  if (products.length !== new Set(productIds.map(String)).size) {
     throw new AppError('Order contains a product that does not exist', 400)
+  }
+
+  for (const item of body.items) {
+    const dbProduct = productMap.get(String(item.product))
+    if (!dbProduct) {
+      throw new AppError(`Product "${item.name}" not found`, 400)
+    }
+    const reqQty = Number(item.quantity)
+    if (!dbProduct.inStock || dbProduct.stock <= 0) {
+      throw new AppError(`"${dbProduct.name}" is currently out of stock.`, 400)
+    }
+    if (dbProduct.stock < reqQty) {
+      throw new AppError(
+        `Insufficient stock for "${dbProduct.name}". Only ${dbProduct.stock} frame${dbProduct.stock === 1 ? '' : 's'} left in stock.`,
+        400
+      )
+    }
   }
 
   if (!LENS_COATINGS.includes(body.lensCoating)) {
@@ -80,6 +99,17 @@ async function validateOrderPayload(body) {
 export const createOrder = async (req, res, next) => {
   try {
     await validateOrderPayload(req.body)
+
+    // Decrement stock for ordered items
+    for (const item of req.body.items) {
+      const p = await Product.findById(item.product)
+      if (p) {
+        p.stock = Math.max(0, p.stock - Number(item.quantity))
+        p.inStock = p.stock > 0
+        await p.save()
+      }
+    }
+
     const order = await Order.create({ user: req.user.id, ...req.body })
     
     // Fetch user email details & send receipt email asynchronously (non-blocking)

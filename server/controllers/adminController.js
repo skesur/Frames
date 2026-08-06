@@ -83,7 +83,7 @@ export const createAdminProduct = async (req, res, next) => {
   try {
     const {
       name, slug, price, category, images,
-      description, badge, rating, modelFile, inStock, featured,
+      description, badge, rating, modelFile, stock, inStock, featured,
     } = req.body
 
     if (!name?.trim())  return next(new AppError('Product name is required', 400))
@@ -103,6 +103,11 @@ export const createAdminProduct = async (req, res, next) => {
       if (isNaN(r) || r < 1 || r > 5) return next(new AppError('Rating must be between 1 and 5', 400))
     }
 
+    const parsedStock = stock !== undefined && stock !== null && stock !== '' ? Number(stock) : 10
+    if (isNaN(parsedStock) || parsedStock < 0) {
+      return next(new AppError('Stock must be a number greater than or equal to 0', 400))
+    }
+
     const cleanSlug = slug.trim().toLowerCase().replace(/\s+/g, '-')
     const existing   = await Product.findOne({ slug: cleanSlug })
     if (existing) return next(new AppError('A product with this slug already exists', 400))
@@ -117,7 +122,8 @@ export const createAdminProduct = async (req, res, next) => {
       rating:      rating ? Number(rating) : 5,
       images:      images.filter(Boolean),
       modelFile:   modelFile?.trim() || '',
-      inStock:     inStock !== undefined ? Boolean(inStock) : true,
+      stock:       parsedStock,
+      inStock:     parsedStock > 0,
       featured:    Boolean(featured),
     })
 
@@ -138,7 +144,7 @@ export const updateAdminProduct = async (req, res, next) => {
     const product = await Product.findById(id)
     if (!product) return next(new AppError('Product not found', 404))
 
-    const allowed = ['name', 'slug', 'price', 'description', 'category', 'badge', 'rating', 'images', 'modelFile', 'inStock', 'featured']
+    const allowed = ['name', 'slug', 'price', 'description', 'category', 'badge', 'rating', 'images', 'modelFile', 'stock', 'inStock', 'featured']
 
     for (const field of allowed) {
       if (req.body[field] === undefined) continue
@@ -147,6 +153,13 @@ export const updateAdminProduct = async (req, res, next) => {
         const p = Number(req.body.price)
         if (isNaN(p) || p < 0) return next(new AppError('Price must be a number greater than or equal to 0', 400))
         product.price = p
+        continue
+      }
+      if (field === 'stock') {
+        const s = Number(req.body.stock)
+        if (isNaN(s) || s < 0) return next(new AppError('Stock must be a number greater than or equal to 0', 400))
+        product.stock = s
+        product.inStock = s > 0
         continue
       }
       if (field === 'category') {

@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema(
     rating:    { type: Number, default: 5, min: 1, max: 5 },
     images:    [{ type: String }],
     modelFile: { type: String, default: '' },
+    stock:     { type: Number, required: true, default: 10, min: 0 },
     inStock:   { type: Boolean, default: true },
     featured:  { type: Boolean, default: false },
   },

@@ -19,29 +19,72 @@ const BADGE_STYLES = {
   'Sport':       'bg-ember/15 text-ember border-ember/25',
 }
 
+function getStockIndicator(product) {
+  const stock = product.stock
+  const isOutOfStock = product.inStock === false || stock === 0
+
+  if (isOutOfStock) {
+    return {
+      text: 'Out of Stock',
+      style: 'bg-red-500/20 text-red-300 border-red-500/30',
+      isOut: true,
+    }
+  }
+
+  if (stock === 1) {
+    return {
+      text: 'Only 1 left',
+      style: 'bg-ember/20 text-ember border-ember/40 font-bold animate-pulse',
+      isOut: false,
+    }
+  }
+
+  if (stock > 1 && stock <= 5) {
+    return {
+      text: stock === 5 ? 'Only Five Frames left' : `Only ${stock} left`,
+      style: 'bg-ember/15 text-ember border-ember/30',
+      isOut: false,
+    }
+  }
+
+  return null
+}
+
 export default function ProductCard({ product, className }) {
   const addItem = useCartStore((s) => s.addItem)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const token = useAuthStore((s) => s.token)
-  const [authMessage, setAuthMessage] = useState(false)
+  const [feedback, setFeedback] = useState(null)
 
   useEffect(() => {
-    if (!authMessage) return undefined
+    if (!feedback) return undefined
 
-    const timer = setTimeout(() => setAuthMessage(false), 2400)
+    const timer = setTimeout(() => setFeedback(null), 2800)
     return () => clearTimeout(timer)
-  }, [authMessage])
+  }, [feedback])
+
+  const stockInfo = getStockIndicator(product)
 
   function handleAdd(e) {
     e.preventDefault()
     e.stopPropagation()
 
     if (!isAuthenticated || !token) {
-      setAuthMessage(true)
+      setFeedback({ type: 'auth', text: 'Login required to add frames to your cart.' })
       return
     }
 
-    addItem(product)
+    if (stockInfo?.isOut) {
+      setFeedback({ type: 'error', text: 'This frame is currently out of stock.' })
+      return
+    }
+
+    const res = addItem(product)
+    if (res && res.success === false) {
+      setFeedback({ type: 'error', text: res.message })
+    } else {
+      setFeedback({ type: 'success', text: 'Added to cart' })
+    }
   }
 
   const badgeStyle = BADGE_STYLES[product.badge] || 'bg-ghost/10 text-ghost-muted border-ghost/20'
@@ -65,14 +108,28 @@ export default function ProductCard({ product, className }) {
         </span>
       )}
 
+      {stockInfo && (
+        <span
+          className={cn(
+            'absolute top-2.5 right-2.5 z-10 font-mono text-[8px] md:text-[9px] uppercase tracking-widest px-1.5 md:px-2 py-0.5 rounded-full border shadow-sm backdrop-blur-sm',
+            stockInfo.style
+          )}
+        >
+          {stockInfo.text}
+        </span>
+      )}
+
       <Link to={productPath} aria-label={`View ${product.name}`}>
         <div className="relative bg-[#0d0d0d] h-32 md:h-44 flex items-center justify-center overflow-hidden">
           <img
             src={product.images?.[0] || '/assets/image/hero_1.png'}
             alt={product.name}
             loading="lazy"
-            className="h-24 md:h-36 w-auto rounded-xl object-contain transition-transform duration-500 group-hover:scale-110"
-            style={{ filter: 'drop-shadow(0 8px 20px rgba(155,92,246,0.15))' }}
+            className={cn(
+              'h-24 md:h-36 w-auto rounded-xl object-contain transition-transform duration-500 group-hover:scale-110',
+              stockInfo?.isOut && 'opacity-40 grayscale'
+            )}
+            style={{ filter: stockInfo?.isOut ? 'none' : 'drop-shadow(0 8px 20px rgba(155,92,246,0.15))' }}
           />
           <div
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
@@ -98,38 +155,45 @@ export default function ProductCard({ product, className }) {
 
           <button
             onClick={handleAdd}
+            disabled={Boolean(stockInfo?.isOut)}
             className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110',
-              isAuthenticated && token
-                ? 'bg-violet hover:bg-violet-dark hover:shadow-[0_0_12px_rgba(155,92,246,0.4)]'
-                : 'bg-white/[0.06] border border-white/[0.1] hover:border-ember/60 hover:shadow-[0_0_12px_rgba(255,107,53,0.25)]'
+              stockInfo?.isOut
+                ? 'bg-white/[0.04] border border-white/[0.08] cursor-not-allowed text-ghost-muted/40'
+                : isAuthenticated && token
+                  ? 'bg-violet hover:bg-violet-dark hover:shadow-[0_0_12px_rgba(155,92,246,0.4)] text-white'
+                  : 'bg-white/[0.06] border border-white/[0.1] hover:border-ember/60 hover:shadow-[0_0_12px_rgba(255,107,53,0.25)] text-ember'
             )}
             aria-label={
-              isAuthenticated && token
-                ? `Add ${product.name} to cart`
-                : 'Login required to add to cart'
+              stockInfo?.isOut
+                ? 'Out of stock'
+                : isAuthenticated && token
+                  ? `Add ${product.name} to cart`
+                  : 'Login required to add to cart'
             }
           >
-            {isAuthenticated && token ? (
-              <ShoppingBag size={13} strokeWidth={2} className="text-white" />
+            {stockInfo?.isOut ? (
+              <Lock size={12} className="text-ghost-muted/50" />
+            ) : isAuthenticated && token ? (
+              <ShoppingBag size={13} strokeWidth={2} />
             ) : (
-              <Lock size={13} strokeWidth={2} className="text-ember" />
+              <Lock size={13} strokeWidth={2} />
             )}
           </button>
         </div>
 
-        {authMessage && (
+        {feedback && (
           <div
             role="status"
             aria-live="polite"
-            className="mt-3 rounded-lg border border-ember/25 bg-ember/10 px-3 py-2 shadow-[0_0_18px_rgba(255,107,53,0.12)]"
+            className={cn(
+              'mt-3 rounded-lg border px-3 py-2 shadow-md font-dm text-xs leading-snug',
+              feedback.type === 'auth' && 'border-ember/25 bg-ember/10 text-ghost',
+              feedback.type === 'error' && 'border-red-400/30 bg-red-400/10 text-red-300',
+              feedback.type === 'success' && 'border-teal/30 bg-teal/10 text-teal'
+            )}
           >
-            <p className="font-dm text-xs leading-snug text-ghost">
-              Login required to add frames to your cart.
-            </p>
-            <p className="font-mono text-[9px] uppercase tracking-widest text-ember/80 mt-1">
-              Sign in first
-            </p>
+            <p>{feedback.text}</p>
           </div>
         )}
 

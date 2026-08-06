@@ -15,7 +15,7 @@ const CATEGORIES = [
 
 const EMPTY_FORM = {
   name: '', slug: '', price: '', description: '', category: '',
-  badge: '', rating: '5', images: '', modelFile: '', inStock: true, featured: false,
+  badge: '', rating: '5', stock: '10', images: '', modelFile: '', inStock: true, featured: false,
 }
 
 function Toast({ message, type, onDone }) {
@@ -44,6 +44,7 @@ function ProductFormModal({ product, onClose, onSaved }) {
           name: product.name || '', slug: product.slug || '', price: String(product.price ?? ''),
           description: product.description || '', category: product.category || '',
           badge: product.badge || '', rating: String(product.rating ?? '5'),
+          stock: String(product.stock ?? '10'),
           images: (product.images || []).join(', '), modelFile: product.modelFile || '',
           inStock: product.inStock ?? true, featured: product.featured ?? false,
         }
@@ -62,6 +63,8 @@ function ProductFormModal({ product, onClose, onSaved }) {
     if (!form.slug.trim())  return setError('Slug is required.')
     if (form.price === '' || isNaN(Number(form.price)) || Number(form.price) < 0)
       return setError('Price must be a valid number.')
+    if (form.stock === '' || isNaN(Number(form.stock)) || Number(form.stock) < 0)
+      return setError('Stock must be a valid non-negative number.')
     if (!form.category) return setError('Category is required.')
 
     const imagesArr = form.images.split(',').map((s) => s.trim()).filter(Boolean)
@@ -70,11 +73,13 @@ function ProductFormModal({ product, onClose, onSaved }) {
     const rating = Number(form.rating)
     if (isNaN(rating) || rating < 1 || rating > 5) return setError('Rating must be between 1 and 5.')
 
+    const parsedStock = Number(form.stock)
+
     const payload = {
       name: form.name.trim(), slug: form.slug.trim(), price: Number(form.price),
       description: form.description.trim(), category: form.category,
-      badge: form.badge.trim(), rating, images: imagesArr,
-      modelFile: form.modelFile.trim(), inStock: form.inStock, featured: form.featured,
+      badge: form.badge.trim(), rating, stock: parsedStock, images: imagesArr,
+      modelFile: form.modelFile.trim(), inStock: parsedStock > 0 && form.inStock, featured: form.featured,
     }
 
     try {
@@ -129,10 +134,14 @@ function ProductFormModal({ product, onClose, onSaved }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block font-mono text-[10px] text-ghost/40 uppercase tracking-widest mb-2">Price (INR) *</label>
               <input type="number" min="0" value={form.price} onChange={(e) => set('price', e.target.value)} className="field" placeholder="2499" />
+            </div>
+            <div>
+              <label className="block font-mono text-[10px] text-ghost/40 uppercase tracking-widest mb-2">Stock (Qty) *</label>
+              <input type="number" min="0" value={form.stock} onChange={(e) => set('stock', e.target.value)} className="field" placeholder="10" />
             </div>
             <div>
               <label className="block font-mono text-[10px] text-ghost/40 uppercase tracking-widest mb-2">Category *</label>
@@ -351,9 +360,19 @@ export default function AdminProducts() {
                 <span className="font-syne font-bold text-sm text-ghost hidden sm:block">{formatPrice(p.price)}</span>
                 <span className={cn(
                   'font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 rounded-full border hidden md:block',
-                  p.inStock ? 'text-teal bg-teal/10 border-teal/20' : 'text-red-400 bg-red-400/10 border-red-400/20'
+                  (!p.inStock || p.stock === 0)
+                    ? 'text-red-400 bg-red-400/10 border-red-400/20'
+                    : (p.stock ?? 10) <= 5
+                      ? 'text-ember bg-ember/10 border-ember/25'
+                      : 'text-teal bg-teal/10 border-teal/20'
                 )}>
-                  {p.inStock ? 'In Stock' : 'Out of Stock'}
+                  {(!p.inStock || p.stock === 0)
+                    ? 'Out of Stock'
+                    : p.stock === 1
+                      ? 'Only 1 Left'
+                      : (p.stock ?? 10) <= 5
+                        ? `Only ${p.stock} Left`
+                        : `${p.stock ?? 10} In Stock`}
                 </span>
                 <div className="flex items-center gap-1.5 flex-shrink-0">
                   <button onClick={() => { setEditTarget(p); setShowForm(true) }} className="w-8 h-8 rounded-lg border border-white/[0.08] flex items-center justify-center text-ghost-muted hover:text-violet hover:border-violet/30 transition-colors">
