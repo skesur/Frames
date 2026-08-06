@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     delivery: {
-      method:  { type: String, enum: ['standard', 'express', 'overnight'], default: 'standard' },
+      method:  { type: String, enum: ['free', 'standard', 'express', 'overnight'], default: 'standard' },
       address: String,
       pincode: String,
       phone:   String,
