@@ -22,7 +22,7 @@ const CONTACT_CARDS = [
   {
     Icon: Mail,
     title: 'Email Us',
-    lines: ['support@frames.com', 'info@frames.com', 'Response within 24 hrs'],
+    lines: ['framessupport@gmail.com', 'Response within 24 hrs'],
   },
 ]
 
