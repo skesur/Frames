@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link }               from 'react-router-dom'
-import { Lock, ShoppingBag, Heart }  from 'lucide-react'
+import { Lock, ShoppingBag, Heart, Bell }  from 'lucide-react'
 import { useCartStore }     from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useAuthStore }     from '@/store/authStore'
+import { useNotificationStore } from '@/store/notificationStore'
 import { formatPrice }      from '@/lib/utils'
 import { cn }               from '@/lib/utils'
 
@@ -57,6 +58,7 @@ export default function ProductCard({ product, className }) {
   const isWishlisted = useWishlistStore((s) => s.isInWishlist(product._id))
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const token = useAuthStore((s) => s.token)
+  const subscribeToRestock = useNotificationStore((s) => s.subscribeToRestock)
   const [feedback, setFeedback] = useState(null)
 
   useEffect(() => {
@@ -75,6 +77,17 @@ export default function ProductCard({ product, className }) {
     setFeedback({ type: res.added ? 'success' : 'info', text: res.message })
   }
 
+  async function handleNotifyMe() {
+    if (!isAuthenticated || !token) {
+      setFeedback({ type: 'auth', text: 'Login required to subscribe to restock alerts.' })
+      return
+    }
+
+    setFeedback({ type: 'info', text: 'Subscribing...' })
+    const res = await subscribeToRestock(product._id)
+    setFeedback({ type: res.success ? 'success' : 'error', text: res.message })
+  }
+
   function handleAdd(e) {
     e.preventDefault()
     e.stopPropagation()
@@ -85,7 +98,7 @@ export default function ProductCard({ product, className }) {
     }
 
     if (stockInfo?.isOut) {
-      setFeedback({ type: 'error', text: 'This frame is currently out of stock.' })
+      handleNotifyMe()
       return
     }
 
@@ -180,25 +193,25 @@ export default function ProductCard({ product, className }) {
 
           <button
             onClick={handleAdd}
-            disabled={Boolean(stockInfo?.isOut)}
+            disabled={false}
             className={cn(
               'w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110',
               stockInfo?.isOut
-                ? 'bg-white/[0.04] border border-white/[0.08] cursor-not-allowed text-ghost-muted/40'
+                ? 'bg-white/[0.06] border border-white/[0.1] hover:border-ember/60 hover:shadow-[0_0_12px_rgba(255,107,53,0.25)] text-ember'
                 : isAuthenticated && token
                   ? 'bg-violet hover:bg-violet-dark hover:shadow-[0_0_12px_rgba(155,92,246,0.4)] text-white'
                   : 'bg-white/[0.06] border border-white/[0.1] hover:border-ember/60 hover:shadow-[0_0_12px_rgba(255,107,53,0.25)] text-ember'
             )}
             aria-label={
               stockInfo?.isOut
-                ? 'Out of stock'
+                ? 'Subscribe to restock alert'
                 : isAuthenticated && token
                   ? `Add ${product.name} to cart`
                   : 'Login required to add to cart'
             }
           >
             {stockInfo?.isOut ? (
-              <Lock size={12} className="text-ghost-muted/50" />
+              <Bell size={13} strokeWidth={2} />
             ) : isAuthenticated && token ? (
               <ShoppingBag size={13} strokeWidth={2} />
             ) : (

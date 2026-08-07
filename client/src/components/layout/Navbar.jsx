@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation }   from 'react-router-dom'
-import { ShoppingBag, User, Heart, Menu, X } from 'lucide-react'
+import { ShoppingBag, User, Heart, Menu, X, Bell } from 'lucide-react'
 import { useCartStore }          from '@/store/cartStore'
 import { useWishlistStore }      from '@/store/wishlistStore'
 import { useAuthStore }          from '@/store/authStore'
+import { useNotificationStore }  from '@/store/notificationStore'
 import { useUIStore }            from '@/store/uiStore'
 import { cn }                    from '@/lib/utils'
 import gsap                      from 'gsap'
@@ -26,6 +27,35 @@ export default function Navbar() {
   const { isAuthenticated, logout } = useAuthStore()
   const cartCount = items.reduce((sum, i) => sum + i.quantity, 0)
   const wishlistCount = wishlistItems.length
+
+  const unreadCount = useNotificationStore((s) => s.unreadCount)
+  const fetchNotifications = useNotificationStore((s) => s.fetchNotifications)
+  const newToast = useNotificationStore((s) => s.newToast)
+  const clearToast = useNotificationStore((s) => s.clearToast)
+
+  // Fetch notifications with polling
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    // Initial fetch (silent to prevent flashing)
+    fetchNotifications(true)
+
+    // Poll every 3 seconds for new alerts
+    const interval = setInterval(() => {
+      fetchNotifications(true)
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [isAuthenticated, fetchNotifications])
+
+  // Auto-dismiss the popup toast after 6 seconds
+  useEffect(() => {
+    if (!newToast) return
+    const timer = setTimeout(() => {
+      clearToast()
+    }, 6000)
+    return () => clearTimeout(timer)
+  }, [newToast, clearToast])
 
   const navbarLogoRef = useRef(null)
   const logoTextRef = useRef(null)
@@ -214,6 +244,22 @@ export default function Navbar() {
             </ul>
 
             <div className="flex items-center gap-6">
+              {isAuthenticated && (
+                <Link
+                  to="/notifications"
+                  aria-label={unreadCount > 0 ? `Notifications (${unreadCount} items)` : 'Notifications'}
+                  className="desktop-nav-action relative w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90 hover:text-orange-500 hover:border-violet/45 transition-colors duration-200"
+                  style={{ opacity: 0 }}
+                >
+                  <Bell size={16} strokeWidth={1.75} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-ember text-void font-mono text-[10px] font-bold flex items-center justify-center leading-none">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
+              )}
+
               <Link
                 to="/wishlist"
                 aria-label={wishlistCount > 0 ? `Wishlist (${wishlistCount} items)` : 'Wishlist'}
@@ -315,6 +361,21 @@ export default function Navbar() {
                   </span>
                 )}
               </Link>
+              {isAuthenticated && (
+                <Link
+                  to="/notifications"
+                  aria-label={unreadCount > 0 ? `Notifications (${unreadCount} items)` : 'Notifications'}
+                  className="relative w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90"
+                >
+                  <Bell size={16} strokeWidth={1.75} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-ember text-void font-mono text-[10px] font-bold flex items-center justify-center leading-none">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
+              )}
+              
               <Link
                 to={isAuthenticated ? '/profile' : '/login'}
                 className="w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90"
@@ -372,6 +433,35 @@ export default function Navbar() {
               alt="Frames Logo"
               className="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(155,92,246,0.35)]"
             />
+          </div>
+        </div>
+      )}
+      {/* Toast Notification Popup */}
+      {newToast && (
+        <div className="fixed bottom-6 right-6 z-[9999] max-w-sm w-[calc(100vw-3rem)] rounded-xl border border-violet/30 bg-[#0c0c0c]/90 backdrop-blur-md p-4 shadow-[0_0_30px_rgba(155,92,246,0.25)] flex gap-3 animate-in fade-in slide-in-from-bottom duration-300">
+          <div className="w-8 h-8 rounded-lg bg-violet/10 border border-violet/20 flex items-center justify-center flex-shrink-0 text-violet">
+            <Bell size={15} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-syne font-bold text-xs text-ghost leading-tight mb-0.5">{newToast.title}</p>
+            <p className="font-dm text-xs text-ghost-muted mb-2 line-clamp-2">{newToast.message}</p>
+            <div className="flex items-center gap-3">
+              {newToast.link && (
+                <Link
+                  to={newToast.link}
+                  onClick={clearToast}
+                  className="font-mono text-[9px] uppercase tracking-widest text-violet hover:text-violet-light font-bold"
+                >
+                  View Details
+                </Link>
+              )}
+              <button
+                onClick={clearToast}
+                className="font-dm text-[10px] text-ghost-muted hover:text-ghost"
+              >
+                Dismiss
+              </button>
+            </div>
           </div>
         </div>
       )}

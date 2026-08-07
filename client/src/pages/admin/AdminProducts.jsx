@@ -141,7 +141,22 @@ function ProductFormModal({ product, onClose, onSaved }) {
             </div>
             <div>
               <label className="block font-mono text-[10px] text-ghost/40 uppercase tracking-widest mb-2">Stock (Qty) *</label>
-              <input type="number" min="0" value={form.stock} onChange={(e) => set('stock', e.target.value)} className="field" placeholder="10" />
+              <input
+                type="number"
+                min="0"
+                value={form.stock}
+                onChange={(e) => {
+                  const val = e.target.value
+                  const parsed = Number(val)
+                  setForm((prev) => ({
+                    ...prev,
+                    stock: val,
+                    inStock: !isNaN(parsed) && parsed > 0 ? true : prev.inStock
+                  }))
+                }}
+                className="field"
+                placeholder="10"
+              />
             </div>
             <div>
               <label className="block font-mono text-[10px] text-ghost/40 uppercase tracking-widest mb-2">Category *</label>

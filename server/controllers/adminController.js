@@ -4,6 +4,7 @@ import Product      from '../models/Product.js'
 import Order         from '../models/Order.js'
 import ContactMessage from '../models/ContactMessage.js'
 import { AppError }   from '../middleware/errorHandler.js'
+import { triggerRestockNotifications, triggerNewProductNotification } from '../services/notificationService.js'
 
 const PRODUCT_CATEGORIES = ['top-sellers', 'new-arrivals', 'round-frames', 'square-frames', 'sunglasses']
 const ORDER_STATUSES     = ['placed', 'processing', 'shipped', 'delivered']
@@ -127,6 +128,11 @@ export const createAdminProduct = async (req, res, next) => {
       featured:    Boolean(featured),
     })
 
+    // Trigger new arrival global alert
+    triggerNewProductNotification(product).catch((err) => {
+      console.error('[Admin Controller] Failed to send new product notification:', err.message)
+    })
+
     res.status(201).json({ success: true, product })
   } catch (err) {
     next(err)
@@ -143,6 +149,8 @@ export const updateAdminProduct = async (req, res, next) => {
 
     const product = await Product.findById(id)
     if (!product) return next(new AppError('Product not found', 404))
+
+    const oldStock = product.stock || 0
 
     const allowed = ['name', 'slug', 'price', 'description', 'category', 'badge', 'rating', 'images', 'modelFile', 'stock', 'inStock', 'featured']
 
@@ -188,7 +196,18 @@ export const updateAdminProduct = async (req, res, next) => {
       product[field] = req.body[field]
     }
 
+    // Ensure inStock is always accurate based on the updated stock value
+    product.inStock = product.stock > 0
+
     await product.save()
+
+    // If product was out of stock and now has stock, trigger restock alerts
+    if (oldStock === 0 && product.stock > 0) {
+      triggerRestockNotifications(product._id).catch((err) => {
+        console.error('[Admin Controller] Failed to trigger restock notifications:', err.message)
+      })
+    }
+
     res.json({ success: true, product })
   } catch (err) {
     next(err)

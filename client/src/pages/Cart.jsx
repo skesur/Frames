@@ -86,6 +86,14 @@ function OrderModal({ onClose, onSuccess }) {
     try {
       setPlacing(true)
 
+      // Handle Free Order (Bypass Razorpay Payment Gateway)
+      if (total === 0) {
+        await api.post('/orders', { ...payload, paymentStatus: 'paid' })
+        clearCart()
+        onSuccess()
+        return
+      }
+
       // Handle Cash on Delivery
       if (form.paymentMethod === 'cod') {
         await api.post('/orders', { ...payload, paymentStatus: 'pending' })

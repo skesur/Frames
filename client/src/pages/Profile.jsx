@@ -1,5 +1,5 @@
 import { useState, useEffect }  from 'react'
-import { useNavigate, Link }    from 'react-router-dom'
+import { useNavigate, Link, useSearchParams }    from 'react-router-dom'
 import { useModalLock } from '@/hooks/useModalLock'
 import {
   User, Mail, Phone, MapPin, Globe, Calendar,
@@ -441,6 +441,7 @@ function OrderDetailsModal({ order, onClose }) {
 /* ── Main Page ── */
 export default function Profile() {
   const navigate      = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { user, isAuthenticated, updateUser, logout } = useAuthStore()
 
   const [orders,      setOrders]      = useState([])
@@ -464,6 +465,17 @@ export default function Profile() {
         const res = await api.get('/orders/mine')
         const fetchedOrders = res.data.orders
         setOrders(fetchedOrders)
+
+        // Deep-link auto-open for ?order=ORDER_ID in url query parameters
+        const orderIdParam = searchParams.get('order')
+        if (orderIdParam) {
+          const matchedOrder = fetchedOrders.find((o) => o._id === orderIdParam)
+          if (matchedOrder) {
+            setActiveOrder(matchedOrder)
+            setSearchParams({}, { replace: true })
+          }
+        }
+
         setActiveOrder((prevActive) => {
           if (!prevActive) return null
           const updated = fetchedOrders.find((o) => o._id === prevActive._id)

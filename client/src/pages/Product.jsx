@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2, Lock, ShoppingBag, Star, Heart } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Lock, ShoppingBag, Star, Heart, Bell } from 'lucide-react'
 import api from '@/lib/axios'
 import { fallbackProducts } from '@/data/products'
 import { useAuthStore } from '@/store/authStore'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
+import { useNotificationStore } from '@/store/notificationStore'
 import { cn, formatPrice } from '@/lib/utils'
 
 function isObjectId(value = '') {
@@ -28,6 +29,7 @@ export default function Product() {
   const isInWishlist = useWishlistStore((s) => s.isInWishlist)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const token = useAuthStore((s) => s.token)
+  const subscribeToRestock = useNotificationStore((s) => s.subscribeToRestock)
 
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -103,6 +105,17 @@ export default function Product() {
     )
   }
 
+
+  async function handleNotifyMe() {
+    if (!isAuthenticated || !token) {
+      setNotice('Login required to subscribe to restock alerts.')
+      return
+    }
+
+    setNotice('Subscribing to restock alerts...')
+    const res = await subscribeToRestock(product._id)
+    setNotice(res.message)
+  }
 
   function handleAddToCart() {
     if (!isAuthenticated || !token) {
@@ -226,19 +239,22 @@ export default function Product() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button
                 type="button"
-                onClick={handleAddToCart}
-                disabled={isOutOfStock}
+                onClick={isOutOfStock ? handleNotifyMe : handleAddToCart}
+                disabled={false}
                 className={cn(
                   'inline-flex flex-1 sm:flex-initial items-center justify-center gap-2 rounded-full px-8 py-3.5 font-dm text-sm font-semibold transition-all duration-200',
                   isOutOfStock
-                    ? 'bg-white/[0.06] text-ghost-muted cursor-not-allowed border border-white/[0.08]'
+                    ? 'bg-ember hover:bg-ember-dark text-void hover:shadow-[0_0_24px_rgba(255,107,53,0.28)]'
                     : isAuthenticated && token
                       ? 'bg-violet hover:bg-violet-dark text-void hover:shadow-[0_0_24px_rgba(155,92,246,0.32)]'
                       : 'bg-ember hover:bg-ember-dark text-void hover:shadow-[0_0_24px_rgba(255,107,53,0.28)]'
                 )}
               >
                 {isOutOfStock ? (
-                  <span>Out of Stock</span>
+                  <>
+                    <Bell size={17} />
+                    Notify Me
+                  </>
                 ) : (
                   <>
                     {isAuthenticated && token ? <ShoppingBag size={17} /> : <Lock size={17} />}

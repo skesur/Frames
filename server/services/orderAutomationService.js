@@ -1,4 +1,5 @@
 import Order from '../models/Order.js'
+import Notification from '../models/Notification.js'
 
 /**
  * Automates the transition of order status through various fulfillment stages.
@@ -57,6 +58,15 @@ export const startOrderStatusAutomation = (orderId, paymentMethod) => {
               order3.orderStatus = 'delivered'
               await order3.save()
               console.log(`[Order Automation] Order ${orderId} status set to 'delivered'.`)
+
+              // Create in-app delivery notification for the user
+              await Notification.create({
+                user: order3.user,
+                type: 'general',
+                title: 'Order Delivered! 🎉',
+                message: `Excellent news! Your order "${order3.orderId}" has been delivered successfully. Enjoy your premium cyber frames!`,
+                link: `/profile?order=${order3._id}`,
+              })
             } catch (err) {
               console.error(`[Order Automation] Error transitioning order ${orderId} to delivered:`, err.message)
             }

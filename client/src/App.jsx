@@ -13,6 +13,7 @@ const About    = lazy(() => import('@/pages/About'))
 const Contact  = lazy(() => import('@/pages/Contact'))
 const Terms    = lazy(() => import('@/pages/Terms'))
 const Wishlist = lazy(() => import('@/pages/Wishlist'))
+const Notifications = lazy(() => import('@/pages/Notifications'))
 const Admin    = lazy(() => import('@/pages/admin/Admin'))
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/cart"    element={<Cart />}    />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/notifications" element={<Notifications />} />
             <Route path="/about"   element={<About />}   />
             <Route path="/contact" element={<Contact />} />
             <Route path="/terms"   element={<Terms />}   />

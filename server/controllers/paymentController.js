@@ -4,7 +4,7 @@ import Order from '../models/Order.js'
 import Product from '../models/Product.js'
 import User from '../models/User.js'
 import { AppError } from '../middleware/errorHandler.js'
-import { sendOrderReceiptEmail } from '../services/emailService.js'
+import Notification from '../models/Notification.js'
 import { startOrderStatusAutomation } from '../services/orderAutomationService.js'
 
 // Create a Razorpay Order ID for the given cart total
@@ -95,16 +95,16 @@ export const verifyRazorpayPayment = async (req, res, next) => {
     // Start automated background order status transitions
     startOrderStatusAutomation(order._id, order.paymentMethod)
 
-    // Send order receipt email (non-blocking)
-    User.findById(req.user.id)
-      .then((user) => {
-        if (user) {
-          sendOrderReceiptEmail(user, order)
-        }
-      })
-      .catch((emailErr) => {
-        console.error('[Payment Controller] Failed to send receipt email:', emailErr)
-      })
+    // Create in-app success notification for the user
+    Notification.create({
+      user: req.user.id,
+      type: 'general',
+      title: 'Order Placed Successfully! 🛒',
+      message: `Your order "${order.orderId}" has been placed successfully for a total of ₹${order.pricing.total.toLocaleString('en-IN')}. We are on it!`,
+      link: `/profile?order=${order._id}`,
+    }).catch((err) => {
+      console.error('[Payment Controller] Failed to create order placement notification:', err.message)
+    })
 
     res.status(201).json({
       success: true,

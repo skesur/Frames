@@ -11,6 +11,7 @@ import cartRoutes    from './routes/cart.js'
 import contactRoutes from './routes/contact.js'
 import adminRoutes from './routes/admin.js'
 import paymentRoutes from './routes/payment.js'
+import notificationRoutes from './routes/notifications.js'
 import { AppError, errorHandler } from './middleware/errorHandler.js'
 
 const app = express()
@@ -80,6 +81,7 @@ app.use('/api/cart',     requireDatabase, cartRoutes)
 app.use('/api/contact',  requireDatabase, contactRoutes)
 app.use('/api/admin',    requireDatabase, adminRoutes)
 app.use('/api/payment',  requireDatabase, paymentRoutes)
+app.use('/api/notifications', requireDatabase, notificationRoutes)
 
 // Global error handler — must be last
 app.use(errorHandler)
