@@ -2,6 +2,7 @@
 
 ## Stack
 Frontend: React + Vite · Tailwind · GSAP + Lenis · Three.js + R3F · Zustand
+
 Backend:  Node.js · Express · MongoDB · JWT + bcrypt
 
 ## Run locally
