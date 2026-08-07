@@ -1,4 +1,4 @@
-# Frames — Premium Cyberpunk Eyewear
+# Frames — Premium Eyewear Shop
 
 ## Stack
 Frontend: React + Vite · Tailwind · GSAP + Lenis · Three.js + R3F · Zustand
