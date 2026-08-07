@@ -1,5 +1,5 @@
-import { useState }          from 'react'
-import { Link }              from 'react-router-dom'
+import { useState, useEffect }          from 'react'
+import { Link, useNavigate }              from 'react-router-dom'
 import { useModalLock } from '@/hooks/useModalLock'
 import {
   ShoppingBag, Trash2, Plus, Minus,
@@ -521,9 +521,21 @@ function CartItem({ item }) {
 
 /* ── Main Cart Page ─────────────────────── */
 export default function Cart() {
-  const { items, clearCart, getTotalItems, getTotalPrice } = useCartStore()
+  const { isAuthenticated, token, user } = useAuthStore()
+  const navigate = useNavigate()
+  const { items: storeItems, clearCart, getTotalItems, getTotalPrice } = useCartStore()
+  const items = (isAuthenticated && token) ? storeItems : []
   const [showModal,   setShowModal]   = useState(false)
   const [orderPlaced, setOrderPlaced] = useState(false)
+
+  // Redirect to login if not logged in
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [user, navigate])
+
+  if (!user) return null
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0)
   const subtotal   = items.reduce((s, i) => s + i.price * i.quantity, 0)

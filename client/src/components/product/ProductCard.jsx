@@ -73,6 +73,10 @@ export default function ProductCard({ product, className }) {
   function handleToggleWishlist(e) {
     e.preventDefault()
     e.stopPropagation()
+    if (!isAuthenticated || !token) {
+      setFeedback({ type: 'auth', text: 'Login required to add frames to your wishlist.' })
+      return
+    }
     const res = toggleWishlist(product)
     setFeedback({ type: res.added ? 'success' : 'info', text: res.message })
   }

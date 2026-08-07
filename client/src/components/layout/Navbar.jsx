@@ -25,8 +25,8 @@ export default function Navbar() {
   const items = useCartStore((s) => s.items)
   const wishlistItems = useWishlistStore((s) => s.items)
   const { isAuthenticated, logout } = useAuthStore()
-  const cartCount = items.reduce((sum, i) => sum + i.quantity, 0)
-  const wishlistCount = wishlistItems.length
+  const cartCount = isAuthenticated ? items.reduce((sum, i) => sum + i.quantity, 0) : 0
+  const wishlistCount = isAuthenticated ? wishlistItems.length : 0
 
   const unreadCount = useNotificationStore((s) => s.unreadCount)
   const fetchNotifications = useNotificationStore((s) => s.fetchNotifications)
@@ -213,12 +213,12 @@ export default function Navbar() {
               src="/assets/image/favicon.svg"
               alt=""
               className="h-10 w-10 object-contain"
-              style={{ opacity: 0 }}
+              style={{ opacity: loadingActive ? 0 : 1 }}
             />
             <span
               ref={logoTextRef}
               className="font-logo text-[1.35rem] text-ghost tracking-tight lowercase leading-none hover:bg-gradient-to-r hover:from-violet hover:to-ember hover:bg-clip-text hover:text-transparent transition-colors duration-500"
-              style={{ display: 'inline-block', opacity: 0 }}
+              style={{ display: 'inline-block', opacity: loadingActive ? 0 : 1 }}
             >
               frames
             </span>
@@ -228,7 +228,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-10">
             <ul className="flex items-center gap-8 list-none">
               {NAV_LINKS.map(({ label, href }) => (
-                <li key={href} className="desktop-nav-link" style={{ opacity: 0 }}>
+                <li key={href} className="desktop-nav-link" style={{ opacity: loadingActive ? 0 : 1 }}>
                   <Link
                     to={href}
                     className={cn(
@@ -253,7 +253,7 @@ export default function Navbar() {
                   to="/notifications"
                   aria-label={unreadCount > 0 ? `Notifications (${unreadCount} items)` : 'Notifications'}
                   className="desktop-nav-action relative w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90 hover:text-orange-500 hover:border-violet/45 transition-colors duration-200"
-                  style={{ opacity: 0 }}
+                  style={{ opacity: loadingActive ? 0 : 1 }}
                 >
                   <Bell size={16} strokeWidth={1.75} />
                   {unreadCount > 0 && (
@@ -265,10 +265,10 @@ export default function Navbar() {
               )}
 
               <Link
-                to="/wishlist"
+                to={isAuthenticated ? '/wishlist' : '/login'}
                 aria-label={wishlistCount > 0 ? `Wishlist (${wishlistCount} items)` : 'Wishlist'}
                 className="desktop-nav-action relative w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90 hover:text-ember hover:border-ember/45 transition-colors duration-200"
-                style={{ opacity: 0 }}
+                style={{ opacity: loadingActive ? 0 : 1 }}
               >
                 <Heart size={16} strokeWidth={1.75} className={cn(wishlistCount > 0 && 'text-ember fill-ember/20')} />
                 {wishlistCount > 0 && (
@@ -282,16 +282,16 @@ export default function Navbar() {
                 to={isAuthenticated ? '/profile' : '/login'}
                 aria-label="Profile"
                 className="desktop-nav-action w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90 hover:text-orange-500 hover:border-violet/45 transition-colors duration-200"
-                style={{ opacity: 0 }}
+                style={{ opacity: loadingActive ? 0 : 1 }}
               >
                 <User size={17} strokeWidth={1.5} />
               </Link>
 
               <Link
-                to="/cart"
+                to={isAuthenticated ? '/cart' : '/login'}
                 aria-label={cartCount > 0 ? `Cart (${cartCount} items)` : 'Cart'}
                 className="desktop-nav-action relative flex items-center justify-center w-8 h-8 bg-violet hover:bg-ember rounded-full transition-colors duration-200"
-                style={{ opacity: 0 }}
+                style={{ opacity: loadingActive ? 0 : 1 }}
               >
                 <ShoppingBag size={17} strokeWidth={2} className="text-white" />
                 {cartCount > 0 && (
@@ -305,7 +305,7 @@ export default function Navbar() {
                 <button
                   onClick={logout}
                   className="desktop-nav-action bg-ember hover:bg-transparent hover:text-ember hover:border-2 hover:border-violet text-void font-dm font-semibold text-sm px-5 py-2.5 rounded-full transition-colors duration-200 w-15 h-8 flex items-center justify-center"
-                  style={{ opacity: 0 }}
+                  style={{ opacity: loadingActive ? 0 : 1 }}
                 >
                   Logout
                 </button>
@@ -313,7 +313,7 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   className="desktop-nav-action bg-ember hover:bg-transparent hover:text-ember hover:border-2 hover:border-violet text-void font-dm font-semibold w-15 h-8 text-sm px-10 py-2.5 rounded-full transition-colors duration-200 flex items-center justify-center"
-                  style={{ opacity: 0 }}
+                  style={{ opacity: loadingActive ? 0 : 1 }}
                 >
                   Login
                 </Link>
@@ -325,7 +325,7 @@ export default function Navbar() {
           <button
             onClick={() => setMenuOpen((p) => !p)}
             className="mobile-nav-toggle md:hidden w-10 h-10 flex items-center justify-center text-ghost/70 hover:text-ghost"
-            style={{ opacity: 0 }}
+            style={{ opacity: loadingActive ? 0 : 1 }}
             aria-label="Menu"
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -354,7 +354,7 @@ export default function Navbar() {
             ))}
             <div className="flex items-center gap-4 pt-4 mt-2 border-t border-white/[0.06]">
               <Link
-                to="/wishlist"
+                to={isAuthenticated ? '/wishlist' : '/login'}
                 aria-label={wishlistCount > 0 ? `Wishlist (${wishlistCount} items)` : 'Wishlist'}
                 className="relative w-8 h-8 rounded-full border border-white/25 flex items-center justify-center text-ghost/90"
               >
@@ -387,7 +387,7 @@ export default function Navbar() {
                 <User size={17} strokeWidth={1.5} />
               </Link>
               <Link
-                to="/cart"
+                to={isAuthenticated ? '/cart' : '/login'}
                 aria-label={cartCount > 0 ? `Cart (${cartCount} items)` : 'Cart'}
                 className="relative flex items-center justify-center w-8 h-8 bg-violet rounded-full transition-colors duration-200"
               >

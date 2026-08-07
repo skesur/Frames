@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import api from '@/lib/axios'
 import { resetCartStorage, useCartStore } from '@/store/cartStore'
+import { useWishlistStore } from '@/store/wishlistStore'
 
 export const useAuthStore = create(
   persist(
@@ -25,6 +26,7 @@ export const useAuthStore = create(
         localStorage.removeItem('frames_token')
         resetCartStorage()
         useCartStore.setState({ items: [] })
+        useWishlistStore.setState({ items: [] })
         set({ user: null, token: null, isAuthenticated: false })
       },
 

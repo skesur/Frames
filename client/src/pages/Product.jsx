@@ -41,6 +41,10 @@ export default function Product() {
 
   function handleToggleWishlist() {
     if (!product) return
+    if (!isAuthenticated || !token) {
+      setNotice('Login required to add frames to your wishlist.')
+      return
+    }
     const res = toggleWishlist(product)
     setNotice(res.message)
   }

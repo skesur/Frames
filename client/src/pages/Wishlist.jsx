@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Heart, ShoppingBag, Trash2, ArrowRight, Sparkles, AlertCircle } from 'lucide-react'
 import { useWishlistStore } from '@/store/wishlistStore'
@@ -8,9 +8,19 @@ import { formatPrice, cn }  from '@/lib/utils'
 
 export default function Wishlist() {
   const navigate = useNavigate()
-  const { items, removeItem, clearWishlist } = useWishlistStore()
+  const { items: storeItems, removeItem, clearWishlist } = useWishlistStore()
   const addItem = useCartStore((s) => s.addItem)
-  const { isAuthenticated, token } = useAuthStore()
+  const { isAuthenticated, token, user } = useAuthStore()
+  const items = (isAuthenticated && token) ? storeItems : []
+
+  // Redirect to login if not logged in
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [user, navigate])
+
+  if (!user) return null
 
   const [notice, setNotice] = useState(null)
 
