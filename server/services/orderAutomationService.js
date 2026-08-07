@@ -27,6 +27,15 @@ export const startOrderStatusAutomation = (orderId, paymentMethod) => {
       await order.save()
       console.log(`[Order Automation] Order ${orderId} status set to 'processing'.`)
 
+      // Create in-app processing notification for the user
+      await Notification.create({
+        user: order.user,
+        type: 'general',
+        title: 'Order Processing ⚙️',
+        message: `Your order "${order.orderId}" is now being processed. We are preparing your frames!`,
+        link: `/profile?order=${order._id}`,
+      })
+
       // 20s (10s after processing): transition to shipped
       setTimeout(async () => {
         try {
@@ -39,6 +48,15 @@ export const startOrderStatusAutomation = (orderId, paymentMethod) => {
           order2.orderStatus = 'shipped'
           await order2.save()
           console.log(`[Order Automation] Order ${orderId} status set to 'shipped'.`)
+
+          // Create in-app shipping notification for the user
+          await Notification.create({
+            user: order2.user,
+            type: 'general',
+            title: 'Order Shipped! 🚚',
+            message: `Great news! Your order "${order2.orderId}" has been shipped and is on its way.`,
+            link: `/profile?order=${order2._id}`,
+          })
 
           // If COD, halt progress right here and never deliver
           if (paymentMethod === 'cod') {

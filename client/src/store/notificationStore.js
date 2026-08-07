@@ -6,6 +6,7 @@ export const useNotificationStore = create((set, get) => ({
   unreadCount:   0,
   loading:       false,
   newToast:      null, // Stores the most recent notification to display as a popup
+  hasLoadedOnce: false,
 
   fetchNotifications: async (silent = false) => {
     try {
@@ -17,10 +18,9 @@ export const useNotificationStore = create((set, get) => ({
       const unread = fetched.filter((n) => !n.isRead).length
 
       // Detect if there are any new unread notifications that we didn't have before to trigger a popup
-      const previous = get().notifications
-      if (previous.length > 0 && fetched.length > previous.length) {
-        // Find newly added unread notifications
-        const prevIds = new Set(previous.map((p) => p._id))
+      const state = get()
+      if (state.hasLoadedOnce) {
+        const prevIds = new Set(state.notifications.map((p) => p._id))
         const brandNew = fetched.filter((f) => !f.isRead && !prevIds.has(f._id))
         
         if (brandNew.length > 0) {
@@ -29,7 +29,7 @@ export const useNotificationStore = create((set, get) => ({
         }
       }
 
-      set({ notifications: fetched, unreadCount: unread })
+      set({ notifications: fetched, unreadCount: unread, hasLoadedOnce: true })
     } catch (err) {
       console.error('[Notification Store] Fetch failed:', err.message)
     } finally {
@@ -85,4 +85,6 @@ export const useNotificationStore = create((set, get) => ({
   },
 
   clearToast: () => set({ newToast: null }),
+
+  reset: () => set({ notifications: [], unreadCount: 0, newToast: null, hasLoadedOnce: false, loading: false }),
 }))

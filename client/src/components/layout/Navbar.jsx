@@ -32,10 +32,14 @@ export default function Navbar() {
   const fetchNotifications = useNotificationStore((s) => s.fetchNotifications)
   const newToast = useNotificationStore((s) => s.newToast)
   const clearToast = useNotificationStore((s) => s.clearToast)
+  const resetNotifications = useNotificationStore((s) => s.reset)
 
-  // Fetch notifications with polling
+  // Fetch notifications with polling and handle reset on logout
   useEffect(() => {
-    if (!isAuthenticated) return
+    if (!isAuthenticated) {
+      resetNotifications()
+      return
+    }
 
     // Initial fetch (silent to prevent flashing)
     fetchNotifications(true)
@@ -46,7 +50,7 @@ export default function Navbar() {
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [isAuthenticated, fetchNotifications])
+  }, [isAuthenticated, fetchNotifications, resetNotifications])
 
   // Auto-dismiss the popup toast after 6 seconds
   useEffect(() => {
