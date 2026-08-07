@@ -13,12 +13,6 @@ cd client && npm install && npm run dev
 ### Server
 cd server && npm install && npm run dev
 
-# Razorpay API Credentials:
+### Razorpay installation
 
 cd server && npm install razorpay
-
-then add these credentials to .env
-
-RAZORPAY_KEY_ID=rzp_live_TMVZHeLxDHWssv
-
-RAZORPAY_KEY_SECRET=J37J4z9wSvn36AFTDbGNzz5K
