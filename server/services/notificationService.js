@@ -1,6 +1,8 @@
 import Notification from '../models/Notification.js'
 import RestockSubscription from '../models/RestockSubscription.js'
 import Product from '../models/Product.js'
+import User from '../models/User.js'
+import { sendRestockAlertEmail, sendNewArrivalBroadcast } from './emailService.js'
 
 /**
  * Sends restock alert notifications to all users who subscribed to a product.
@@ -31,6 +33,18 @@ export const triggerRestockNotifications = async (productId) => {
     // Bulk insert the notifications
     await Notification.insertMany(notificationsToCreate)
 
+    // Trigger restock alert emails to each subscribed user (non-blocking)
+    subscriptions.forEach(async (sub) => {
+      try {
+        const userObj = await User.findById(sub.user)
+        if (userObj) {
+          sendRestockAlertEmail(userObj, product)
+        }
+      } catch (err) {
+        console.error(`[Notification Service] Failed to send restock email to user ${sub.user}:`, err.message)
+      }
+    })
+
     // Clear subscriptions
     await RestockSubscription.deleteMany({ product: productId })
     console.log(`[Notification Service] Triggered restock alerts and cleared subscriptions for: ${product.name}`)
@@ -56,6 +70,11 @@ export const triggerNewProductNotification = async (product) => {
       title: 'New Arrival! 🔥',
       message: `A new cyber frame "${product.name}" has just dropped! Explore the fresh cybernetic style in the catalog.`,
       link: `/product/${product.slug}`,
+    })
+
+    // Broadcast email to all registered users (non-blocking)
+    sendNewArrivalBroadcast(product).catch((err) => {
+      console.error('[Notification Service] Failed to send new product arrival broadcast:', err.message)
     })
 
     console.log(`[Notification Service] Triggered global new-product notification for: ${product.name}`)

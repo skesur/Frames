@@ -1,5 +1,7 @@
 import Order from '../models/Order.js'
 import Notification from '../models/Notification.js'
+import User from '../models/User.js'
+import { sendOrderUpdateEmail } from './emailService.js'
 
 /**
  * Automates the transition of order status through various fulfillment stages.
@@ -35,6 +37,15 @@ export const startOrderStatusAutomation = (orderId, paymentMethod) => {
         message: `Your order "${order.orderId}" is now being processed. We are preparing your frames!`,
         link: `/profile?order=${order._id}`,
       })
+
+      // Send order processing update email
+      User.findById(order.user)
+        .then((userObj) => {
+          if (userObj) sendOrderUpdateEmail(userObj, order, 'processing')
+        })
+        .catch((err) => {
+          console.error('[Order Automation] Failed to send processing email:', err.message)
+        })
 
       // 20s (10s after processing): transition to shipped
       setTimeout(async () => {
@@ -85,6 +96,15 @@ export const startOrderStatusAutomation = (orderId, paymentMethod) => {
                 message: `Excellent news! Your order "${order3.orderId}" has been delivered successfully. Enjoy your premium cyber frames!`,
                 link: `/profile?order=${order3._id}`,
               })
+
+              // Send order delivery update email
+              User.findById(order3.user)
+                .then((userObj) => {
+                  if (userObj) sendOrderUpdateEmail(userObj, order3, 'delivered')
+                })
+                .catch((err) => {
+                  console.error('[Order Automation] Failed to send delivery email:', err.message)
+                })
             } catch (err) {
               console.error(`[Order Automation] Error transitioning order ${orderId} to delivered:`, err.message)
             }
