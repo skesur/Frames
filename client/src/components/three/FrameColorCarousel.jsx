@@ -85,7 +85,9 @@ function Scene({ activeIndex, modelRef, isAnimating }) {
         />
       </Float>
 
-      <Environment preset="studio" />
+      <Suspense fallback={null}>
+        <Environment preset="studio" />
+      </Suspense>
     </>
   )
 }

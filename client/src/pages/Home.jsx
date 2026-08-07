@@ -301,6 +301,7 @@ export function HomeContent() {
     return () => clearTimeout(timer)
   }, [])
 
+
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', handleResize)
@@ -413,7 +414,9 @@ export function HomeContent() {
                 introAnimationDone={introAnimationDone}
                 onModelSettled={() => setModelSettled(true)}
               />
-              <Environment preset="studio" />
+              <Suspense fallback={null}>
+                <Environment preset="studio" />
+              </Suspense>
             </Suspense>
             </Canvas>
           )}
@@ -638,7 +641,9 @@ function ColorsSection() {
                 <directionalLight position={[-4, 2, -3]} intensity={1.0} />
                 <Suspense fallback={null}>
                   <ColorSectionModel activeColorId={activeColor} />
-                  <Environment preset="studio" />
+                  <Suspense fallback={null}>
+                    <Environment preset="studio" />
+                  </Suspense>
                 </Suspense>
               </Canvas>
             )}
